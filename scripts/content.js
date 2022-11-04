@@ -151,6 +151,7 @@
     }
 
     const beginToFetch = function () {
+        $('.speechless').css({ top: '25px' })
         $('.speechless-action').hide()
         $('.speechless-done').hide()
         $('.speechless-fetching').show()
