@@ -1,14 +1,15 @@
 {
     "manifest_version": 3,
-    "name": "Reading time",
-    "version": "1.0",
-    "description": "Add the reading time to Chrome Extension documentation articles",
+    "name": "Speechless",
+    "version": "0.1",
+    "description": "把新浪微博的内容导出成 PDF 文件进行备份",
+    
     "content_scripts": [
         {
-          "js": ["scripts/content.js"],
+          "js": ["scripts/jquery-3.6.1.min.js","scripts/content.js"],
+          "css":["style/speechless.css"],
           "matches": [
-            "https://developer.chrome.com/docs/extensions/*",
-            "https://developer.chrome.com/docs/webstore/*"
+            "https://weibo.com/*"
           ]
         }
       ]

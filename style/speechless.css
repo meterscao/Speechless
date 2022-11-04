@@ -1,0 +1,161 @@
+/* Reset */
+body {    
+    height: auto!important;
+    background: #fff !important;
+    color: #000!important;
+    padding: 20px!important;
+    font-size: 14px!important;
+    line-height: 24px!important;
+}
+#WB_webchat {
+    display: none !important;
+}
+
+.icon_setskin {
+    display: none !important;
+}
+
+div[i-am-music-player] {
+    display: none !important
+}
+
+/* Post Styles */
+.speechless-post {
+    font-size:14px;
+    line-height: 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.speechless-post .text img,
+.speechless-post .retweet img {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: -3px;
+    margin: 0 2px;
+}
+
+.speechless-post .meta {
+    width: 140px;
+    float: left;
+    color: #666;
+}
+
+.speechless-post .region {}
+
+.speechless-post .main {
+    overflow: hidden;
+}
+
+.speechless-post .retweet {
+    background: #f1f1f1;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.speechless-post .media {
+    padding-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.speechless-post .media img {
+    width: 150px;
+    object-fit: cover;
+    height: 150px;
+}
+
+/* Panel style */
+.speechless {
+    color:rgb(15,23,42);
+    position: fixed;
+    width: 300px;
+    padding: 15px;
+    background: #fff;
+    box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(51, 65, 85, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.05) 0px 20px 25px -5px, rgba(0, 0, 0, 0.05) 0px 8px 10px -6px;
+    border-radius: 10px;
+    top: 25px;
+    right: 25px;
+    z-index: 100001;
+    overflow: hidden;
+    /* background-image: url(https://tailwindui.com/img/beams-basic-transparent.png); */
+    background-position: top center;
+    background-size:cover;
+    background-repeat: no-repeat;
+    font-size: 14px;
+    line-height: 24px;;
+}
+
+.speechless-progress {
+    margin-top: 10px;
+    height: 8px;
+    background: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.speechless-progress-bar {
+    width: 0%;
+    height: 8px;
+    background-color: rgb(94, 186, 125)
+}
+
+.speechless-head {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    gap:5px;
+}
+
+.speechless-logo {
+    width: 40px;
+    height: 40px;
+}
+
+.speechless-title {
+    font-size: 24px;
+    font-weight: 500;
+    
+}
+
+.speechless .item-center{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.speechless-button{
+    border-radius: 3px;
+    padding:7px 16px;
+    color:#fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 19px;
+    cursor: pointer;
+    display: inline-block;
+    background: rgba(94, 186, 125,1);
+    /* box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px,rgba(51, 65, 85, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.05) 0px 1px 2px 0px; */
+}
+.speechless-button:hover{
+    background: rgba(94, 186, 125,0.8);
+}
+
+.speechless-main {
+    padding-top: 15px;
+}
+
+
+/* Print */
+@media print {
+    .speechless-post .media {
+        page-break-inside: avoid;
+    }
+    .speechless{
+        display: none;
+    }
+}
