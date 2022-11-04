@@ -10,7 +10,12 @@
           "css":["style/speechless.css"],
           "matches": [
             "https://weibo.com/*"
-          ]
+          ],
+          "run_at": "document_end"
         }
-      ]
+      ],
+      "web_accessible_resources": [{
+        "resources": ["scripts/script.js"],
+        "matches": ["<all_urls>"]
+      }]
   }

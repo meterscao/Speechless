@@ -2,8 +2,7 @@
 body {    
     height: auto!important;
     background: #fff !important;
-    color: #000!important;
-    padding: 20px!important;
+    color: #000!important;    
     font-size: 14px!important;
     line-height: 24px!important;
 }
@@ -20,6 +19,9 @@ div[i-am-music-player] {
 }
 
 /* Post Styles */
+.speechless-list{
+    padding:20px;
+}
 .speechless-post {
     font-size:14px;
     line-height: 24px;
@@ -82,12 +84,13 @@ div[i-am-music-player] {
     right: 25px;
     z-index: 100001;
     overflow: hidden;
-    /* background-image: url(https://tailwindui.com/img/beams-basic-transparent.png); */
+    background-image: url(https://tailwindui.com/img/beams-basic-transparent.png);
     background-position: top center;
     background-size:cover;
     background-repeat: no-repeat;
     font-size: 14px;
-    line-height: 24px;;
+    line-height: 24px;
+    transition: top 0.3s linear;
 }
 
 .speechless-progress {
@@ -115,6 +118,9 @@ div[i-am-music-player] {
 .speechless-logo {
     width: 40px;
     height: 40px;
+    font-size: 40px;
+    text-align: center;
+    line-height: 40px;
 }
 
 .speechless-title {
