@@ -20,22 +20,44 @@
     emojiMap.set('fetching', '🤯')
     emojiMap.set('done', '🤖')
 
-    const getUIDFromInjectScript = function () {
+    const getUID = async function(){
+        let uidFromURL = getUIDFromURL()
+        let uidFromScript = await getUIDFromInjectScript()
+        let uidFromDom = getUIDFromDom()
+        return uidFromScript || uidFromURL 
+    }
 
+    const getUIDFromURL = function () {
+        let uid                
+        let url = location.href
+        let regRes = url.match(/weibo.com\/(u\/)?(\d+)/)
+        if (regRes && regRes.length > 1) {
+            uid = regRes.pop()
+        }
+        console.log('uid from url is: ' , uid)
+        return uid        
+    }
+
+    const getUIDFromDom = function(){
+        let el = document.querySelector('header.woo-box-flex>a')
+        
+        console.log(el)
+    }
+
+    const getUIDFromInjectScript = function () {
         var s = document.createElement('script');
         s.src = chrome.runtime.getURL('scripts/script.js');
         (document.head || document.documentElement).appendChild(s);
         s.onload = function () {
             s.remove();
         };
-
         return new Promise((resolve, reject) => {
             // Event listener
             document.addEventListener('event_get_global_data', function (e) {
                 // e.detail contains the transferred data (can be anything, ranging
                 // from JavaScript objects to strings).
                 // Do something, for example:    
-                console.log('get uid from inject script: ', e.detail)
+                console.log('uid from inject script: ', e.detail)
                 resolve(e.detail)
             });
         })
@@ -139,18 +161,7 @@
         updateWholePageState()
     }
 
-    const getUID = function () {
-        let uid
-        // uid = window.$CONFIG.oid || ''
-        if (uid) return uid;
-        let url = location.href
-        let regRes = url.match(/weibo.com\/(u\/)?(\d+)/)
-        if (regRes && regRes.length > 1) {
-            uid = regRes.pop()
-        }
-        console.log(uid)
-        return uid
-    }
+    
 
     const initThePanel = function (uid) {
         console.log(uid)
@@ -170,7 +181,7 @@
             <div class="item-center"><span class="speechless-tips">🪩 正在努力回忆中...</span><span class="speechless-count"">0/0</span></div>
             <div class="speechless-progress"><div class="speechless-progress-bar"></div></div>
             </div>`)
-            $speechLess.append(`<div class="speechless-done item-center" style="display:none;"><span class="speechless-tips">🗄 全部都回想起来了...</span><span class="speechless-button" id="doSavepdf">保存为 PDF</span></div>`)
+            $speechLess.append(`<div class="speechless-done item-center" style="display:none;"><span class="speechless-tips">🗄 只能回想起这么多了...</span><span class="speechless-button" id="doSavepdf">保存为 PDF</span></div>`)
 
             $progressCount = $('.speechless-count')
             $progressBar = $('.speechless-progress-bar')
@@ -211,7 +222,8 @@
     }
 
     const clearTheBody = function () {
-        $(".WB_miniblog").remove("")
+        $(".WB_miniblog").remove()
+        $("#app").remove()
         $("#WB_webchat").remove()
         $('body').append(`<div class="speechless-list"></div>`)
         $speechlessList = $('.speechless-list')
@@ -285,7 +297,7 @@
         fetchFinished()
     }
 
-    uid = await getUIDFromInjectScript()       
+    uid = await getUID()
     initThePanel(uid)
     
 })();

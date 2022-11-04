@@ -1,8 +1,6 @@
 /* Reset */
 body {    
-    height: auto!important;
-    background: #fff !important;
-    color: #000!important;    
+    height: auto!important;         
     font-size: 14px!important;
     line-height: 24px!important;
 }
@@ -21,6 +19,8 @@ div[i-am-music-player] {
 /* Post Styles */
 .speechless-list{
     padding:20px;
+    color: #000!important;   
+    background: #fff !important;
 }
 .speechless-post {
     font-size:14px;
