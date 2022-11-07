@@ -1,4 +1,4 @@
-console.log(333)
+
 chrome.tabs.onUpdated.addListener(
     function(tabId, changeInfo, tab) {
       // read changeInfo data and do something with it
@@ -13,3 +13,5 @@ chrome.tabs.onUpdated.addListener(
       }
     }
   );
+
+  console.log(111)
