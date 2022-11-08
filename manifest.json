@@ -9,6 +9,16 @@
         "48": "images/speechless48.png",
         "128": "images/speechless128.png"
     },
+    "action": {
+            "default_popup": "hello.html",
+          
+        "default_icon": {
+            "16": "images/speechless16.png",
+            "32": "images/speechless32.png",
+            "48": "images/speechless48.png",
+            "128": "images/speechless128.png"
+        }
+      },
     "content_scripts": [
         {
             "js": [
@@ -24,10 +34,10 @@
             "run_at": "document_end"
         }
     ],
+    
     "background": {
-        "service_worker": 
-            "scripts/background.js"
-    },
+        "service_worker": "scripts/background.js"
+      },
     "web_accessible_resources": [
         {
             "resources": [
@@ -38,7 +48,5 @@
             ]
         }
     ],
-    "permissions": [
-        "activeTab"
-    ]
+    "permissions": ["activeTab","scripting"]
 }
