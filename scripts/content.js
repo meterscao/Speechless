@@ -23,21 +23,12 @@
     emojiMap.set('fetching', '🤯')
     emojiMap.set('done', '🤖')
 
-    chrome.runtime.onMessage.addListener(
-        function (request, sender, sendResponse) {
-            // listen for messages sent from background.js
-            if (request.message === 'urlChanged') {
-                console.log(request.url) // new url is now in content scripts!
-                init()
-            }
-        });
 
     // 获取要导出用户的UID
     const getUID = async function () {
         let uidFromURL = getUIDFromURL()
-        let uidFromScript = await getUIDFromInjectScript()
-        let uidFromDom = getUIDFromDom()
-        return uidFromScript || uidFromURL
+        // let uidFromDom = getUIDFromDom()
+        return uidFromURL || ''
     }
 
     // 从URL里面获取
@@ -59,7 +50,7 @@
         console.log(el)
     }
 
-    const getUserName = function () {
+    const getUserNameFromTitle = function () {
 
         let timer
         let name
@@ -75,32 +66,30 @@
                     clearInterval(timer)
                     resolve(name)
                 }
-                if (count > 5) reject()
+                if (count > 5) resolve('')
             }, 200);
         })
 
     }
-    // 对于老版本的微博页面，尝试从 window 取出来
-    const getUIDFromInjectScript = function () {
-        var s = document.createElement('script');
-        s.src = chrome.runtime.getURL('scripts/script.js');
-        (document.head || document.documentElement).appendChild(s);
-        s.onload = function () {
-            s.remove();
-        };
-        return new Promise((resolve, reject) => {
-            // Event listener
-            document.addEventListener('event_get_global_data', function (e) {
-                // e.detail contains the transferred data (can be anything, ranging
-                // from JavaScript objects to strings).
-                // Do something, for example:    
-                console.log('uid from inject script: ', e.detail)
-                resolve(e.detail)
-            });
-        })
+    const getUserNameFromHTML = function(){
+        let nameEL = document.querySelector('h1.username')
+        let name
+        if(nameEL){
+            name = nameEL.textContent
+        }
+        else{
+            name = ''
+        }
 
+        return name
     }
 
+    const getUserName = async function(){
+        let nameFromHTML = getUserNameFromHTML()
+        let nameFromTitle = await getUserNameFromTitle()
+        return nameFromHTML || nameFromTitle
+    }
+    
     // 声明fetch方法
     const fetchData = function (config) {
         let url = config.url
@@ -224,13 +213,13 @@
 
         if (uid) {
             $speechlessMain.append(`<div class="speechless-action item-center">
-            <span class="speechless-tips">🗳 把<span class="speechless-username">@${username}</span>的记忆打包...</span><span class="speechless-button" id="doSpeechless">开始</span>
+            <span class="speechless-tips">📦 把<span class="speechless-username">@${username}</span>的记忆打包...</span><span class="speechless-button" id="doSpeechless">开始</span>
             </div>`)
             $speechlessMain.append(`<div class="speechless-fetching" style="display:none;">
-            <div class="item-center"><span class="speechless-tips">🪩 正在努力回忆中...</span><span class="speechless-count"">0/0</span></div>
+            <div class="item-center"><span class="speechless-tips">📡 正在努力回忆中...</span><span class="speechless-count"">0/0</span></div>
             <div class="speechless-progress"><div class="speechless-progress-bar"></div></div>
             </div>`)
-            $speechlessMain.append(`<div class="speechless-done item-center" style="display:none;"><span class="speechless-tips">🗄 只能回想起这么多了...</span><span class="speechless-button" id="doSavepdf">保存为 PDF</span></div>`)
+            $speechlessMain.append(`<div class="speechless-done item-center" style="display:none;"><span class="speechless-tips">🖨 只能回想起这么多了...</span><span class="speechless-button" id="doSavepdf">保存为 PDF</span></div>`)
 
             $progressCount = $('.speechless-count')
             $progressBar = $('.speechless-progress-bar')
@@ -338,7 +327,6 @@
                             post.retweeted_status.text = longtextData.longTextContent || ''
                         }
                         catch (err) { console.error(err) }
-
                     }
                     appendPostToBody(post)
                 }
@@ -354,7 +342,6 @@
         
         uid = await getUID()
         username = await getUserName();
-        console.log(username)
         initThePanel(uid)
     }
     init()

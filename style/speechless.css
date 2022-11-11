@@ -75,7 +75,7 @@ div[i-am-music-player] {
 .speechless {
     color:rgb(15,23,42);
     position: fixed;
-    width: 300px;
+    width: 360px;
     padding: 15px;
     background: #fff;
     box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(51, 65, 85, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.05) 0px 20px 25px -5px, rgba(0, 0, 0, 0.05) 0px 8px 10px -6px;
@@ -110,6 +110,7 @@ div[i-am-music-player] {
 .speechless-head {
     display: flex;
     align-items: center;
+    
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
     gap:5px;
@@ -144,11 +145,13 @@ div[i-am-music-player] {
     line-height: 19px;
     cursor: pointer;
     display: inline-block;
-    background: rgba(94, 186, 125,1);
+    background: rgb(4, 194, 118);
+    flex-shrink: 0;
+
     /* box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px,rgba(51, 65, 85, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.05) 0px 1px 2px 0px; */
 }
 .speechless-button:hover{
-    background: rgba(94, 186, 125,0.8);
+    background: rgba(4, 194, 118,0.9);
 }
 
 .speechless-main {
@@ -156,6 +159,7 @@ div[i-am-music-player] {
 }
 .speechless-username{
     margin:0 3px;
+    /* color:rgb(4, 194, 118); */
     position: relative;
 }
 .speechless-username::after{
@@ -163,7 +167,7 @@ div[i-am-music-player] {
     height:4px;
     width:100%;
     position: absolute;
-    background: rgba(94, 186, 125,0.3);
+    background: rgba(4, 194, 118,0.8);
     bottom:-1px;
     left:0;
 }
