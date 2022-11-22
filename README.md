@@ -37,7 +37,8 @@ Chrome 并没有为 Extension 提供直接导出 PDF 的 Api，但是可以借�
 
 ## 更新
 
-- version 1.1 
+### version 1.1 
+- 使用 Weibo API 获取用户 UID 和用户名 [@jingfelix](https://github.com/jingfelix)
+- 修复了 icon name 错误的大小写问题  [@jjhhms](https://github.com/jjhhms)
 
-使用 Weibo API 获取用户 UID 和用户名 [@jingfelix](https://github.com/jingfelix)
 
