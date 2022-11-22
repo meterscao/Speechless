@@ -2,6 +2,7 @@
     'use strict';
     const $ = jQuery
 
+    let id
     let uid
     let username
 
@@ -23,71 +24,35 @@
     emojiMap.set('fetching', '🤯')
     emojiMap.set('done', '🤖')
 
-
-    // 获取要导出用户的UID
-    const getUID = async function () {
-        let uidFromURL = getUIDFromURL()
-        // let uidFromDom = getUIDFromDom()
-        return uidFromURL || ''
-    }
-
-    // 从URL里面获取
-    const getUIDFromURL = function () {
-        let uid
-        let url = location.href
-        let regRes = url.match(/weibo.com\/(u\/)?(\d+)/)
-        if (regRes && regRes.length > 1) {
-            uid = regRes.pop()
-        }
-        console.log('uid from url is: ', uid)
-        return uid
-    }
-
-    // 从Dom里面获取
-    const getUIDFromDom = function () {
-        let el = document.querySelector('header.woo-box-flex>a')
-
-        console.log(el)
-    }
-
-    const getUserNameFromTitle = function () {
-
-        let timer
-        let name
-        let count = 0
-        return new Promise((resolve, reject) => {
-            timer = setInterval(() => {
-                count++
-                let title = document.title
-                let nameReg = title.match(/@(\S+) 的个人主页/)
-                if (nameReg) {
-                    name = nameReg.pop()
-                    console.log(name)
-                    clearInterval(timer)
-                    resolve(name)
+    // 使用 Weibo API 获取用户 UID 和用户名
+    const getInfo = function () {
+        id = getIDFromURL()
+        if(id){
+            $.ajax({
+                async: false,
+                type: 'GET',
+                url: `https://weibo.com/ajax/profile/info?custom=${id}`,
+                success: function (data) {
+                    uid = data.data.user.id
+                    username = data.data.user.screen_name
+                    console.log('uid', uid)
+                    console.log('username', username)
                 }
-                if (count > 5) resolve('')
-            }, 200);
-        })
-
-    }
-    const getUserNameFromHTML = function(){
-        let nameEL = document.querySelector('h1.username')
-        let name
-        if(nameEL){
-            name = nameEL.textContent
+            })
         }
-        else{
-            name = ''
-        }
-
-        return name
+        
     }
 
-    const getUserName = async function(){
-        let nameFromHTML = getUserNameFromHTML()
-        let nameFromTitle = await getUserNameFromTitle()
-        return nameFromHTML || nameFromTitle
+    // 从URL中获取ID，注意不是UID
+    const getIDFromURL = function () {
+        let id
+        let url = location.href
+        let regRes = url.match(/weibo.com\/(u\/)*(\w+)/)
+        if (regRes && regRes.length > 1) {
+            id = regRes.pop()
+        }
+        console.log('id from url is: ', id)
+        return id
     }
     
     // 声明fetch方法
@@ -232,7 +197,7 @@
             })
         }
         else {
-            $speechlessMain.append(`😵‍💫 获取账号信息失败了...`)
+            $speechlessMain.append(`😵‍💫 请进入个人主页，刷新页面后使用`)
         }
     }
 
@@ -338,10 +303,8 @@
         fetchFinished()
     }
 
-    const init = async function(){
-        
-        uid = await getUID()
-        username = await getUserName();
+    const init = function(){
+        getInfo()
         initThePanel(uid)
     }
     init()
