@@ -4,10 +4,10 @@
     "version": "1.1",
     "description": "把新浪微博的内容，导出成 PDF 文件进行备份",
     "icons": {
-        "16": "images/Speechless16.png",
-        "32": "images/Speechless32.png",
-        "48": "images/Speechless48.png",
-        "128": "images/Speechless128.png"
+        "16": "icons/Speechless16.png",
+        "32": "icons/Speechless32.png",
+        "48": "icons/Speechless48.png",
+        "128": "icons/Speechless128.png"
     },
     
     "content_scripts": [
