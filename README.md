@@ -34,3 +34,8 @@ Chrome 并没有为 Extension 提供直接导出 PDF 的 Api，但是可以借�
 ## 其他
 
 - 愿人人都有自由表达的权利。
+
+## Updated
+- version 1.1 
+使用 Weibo API 获取用户 UID 和用户名 [@jingfelix](https://github.com/jingfelix)
+
