@@ -27,17 +27,20 @@
     // 使用 Weibo API 获取用户 UID 和用户名
     const getInfo = function () {
         id = getIDFromURL()
-        $.ajax({
-            async: false,
-            type: 'GET',
-            url: `https://weibo.com/ajax/profile/info?custom=${id}`,
-            success: function (data) {
-                uid = data.data.user.id
-                username = data.data.user.screen_name
-                console.log('uid', uid)
-                console.log('username', username)
-            }
-        })
+        if(id){
+            $.ajax({
+                async: false,
+                type: 'GET',
+                url: `https://weibo.com/ajax/profile/info?custom=${id}`,
+                success: function (data) {
+                    uid = data.data.user.id
+                    username = data.data.user.screen_name
+                    console.log('uid', uid)
+                    console.log('username', username)
+                }
+            })
+        }
+        
     }
 
     // 从URL中获取ID，注意不是UID
@@ -194,7 +197,7 @@
             })
         }
         else {
-            $speechlessMain.append(`😵‍💫 获取账号信息失败了...`)
+            $speechlessMain.append(`😵‍💫 请进入个人主页，刷新页面后使用`)
         }
     }
 
