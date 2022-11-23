@@ -56,6 +56,7 @@ div[i-am-music-player] {
     background: #f1f1f1;
     padding: 8px;
     margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .speechless-post .media {
@@ -69,6 +70,15 @@ div[i-am-music-player] {
     width: 150px;
     object-fit: cover;
     height: 150px;
+}
+
+.speechless-post .interactionStats {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.speechless-post .interactionStats > div:not(:last-of-type){
+    margin-right: 5px;
 }
 
 /* Panel style */

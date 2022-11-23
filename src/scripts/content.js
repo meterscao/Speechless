@@ -117,6 +117,10 @@
         setProgress()
     }
 
+    const isNullOrUndefined = function(attribute) {
+        return attribute === null && attribute === undefined
+    }
+
     // 把卡片添加到页面中
     const appendPostToBody = function (post) {
 
@@ -144,12 +148,26 @@
             }
             mediaHTML += '</div>'
         }
+
+        let interactionStatsHTML = ''
+        // Count could be zero
+        if (!isNullOrUndefined(post.reposts_count) &&
+            !isNullOrUndefined(post.comments_count) &&
+            !isNullOrUndefined(post.attitudes_count)) {
+            interactionStatsHTML += '<div class="interactionStats">'
+            interactionStatsHTML += `<div>转发: ${post.reposts_count}</div>`
+            interactionStatsHTML += `<div>评论: ${post.comments_count}</div>`
+            interactionStatsHTML += `<div>赞: ${post.attitudes_count}</div>`
+            interactionStatsHTML += '</div>'
+        } 
+
         let postHTML = `<div class="speechless-post">
             ${metaHTML}
             <div class="main">
             ${textHTML}
             ${retweetHTML}
             ${mediaHTML}
+            ${interactionStatsHTML}
             </div>
             </div>`
         $speechlessList.append(postHTML)
