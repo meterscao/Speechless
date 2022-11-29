@@ -153,12 +153,27 @@
     const appendPostToBody = function (post) {
 
         let metaHTML = ''
-        metaHTML += `<div class="meta">`
-        metaHTML += `<span class="date">${getDate(post.created_at)}</span>`
+        let interactionStatsHTML = ''
+        // Count could be zero
+        if (!isNullOrUndefined(post.reposts_count) &&
+            !isNullOrUndefined(post.comments_count) &&
+            !isNullOrUndefined(post.attitudes_count)) {
+            interactionStatsHTML += '<div class="interactionStats">'
+            interactionStatsHTML += `<label>转·${post.reposts_count}</label>`
+            interactionStatsHTML += `<label>评·${post.comments_count}</label>`
+            interactionStatsHTML += `<label>赞·${post.attitudes_count}</label>`
+            interactionStatsHTML += '</div>'
+        } 
+
+        metaHTML += `<div class="meta">
+                    <div class="meta-info">
+                        <span class="date">${getDate(post.created_at)}</span>`
         if (post.region_name) {
             metaHTML += `<div class="region">${post.region_name.replace('发布于 ', '')}</div>`
         }
-        metaHTML += `</div>`
+        
+        metaHTML += `</div>
+                    ${interactionStatsHTML}</div>`
 
         let textHTML = `<div class="text">${clearLineBreak(post.text)}</div>`
 
@@ -177,25 +192,14 @@
             mediaHTML += '</div>'
         }
 
-        let interactionStatsHTML = ''
-        // Count could be zero
-        if (!isNullOrUndefined(post.reposts_count) &&
-            !isNullOrUndefined(post.comments_count) &&
-            !isNullOrUndefined(post.attitudes_count)) {
-            interactionStatsHTML += '<div class="interactionStats">'
-            interactionStatsHTML += `<div>转发: ${post.reposts_count}</div>`
-            interactionStatsHTML += `<div>评论: ${post.comments_count}</div>`
-            interactionStatsHTML += `<div>赞: ${post.attitudes_count}</div>`
-            interactionStatsHTML += '</div>'
-        } 
+        
 
         let postHTML = `<div class="speechless-post">
             ${metaHTML}
             <div class="main">
             ${textHTML}
             ${retweetHTML}
-            ${mediaHTML}
-            ${interactionStatsHTML}
+            ${mediaHTML}            
             </div>
             </div>`
         $speechlessList.append(postHTML)

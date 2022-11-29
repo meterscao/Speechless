@@ -29,6 +29,7 @@ div[i-am-music-player] {
     padding-bottom: 10px;
     margin-bottom: 10px;
     overflow: hidden;
+    display: flex;
 }
 
 .speechless-post .text img,
@@ -41,15 +42,18 @@ div[i-am-music-player] {
 }
 
 .speechless-post .meta {
-    width: 140px;
-    float: left;
+    width: 150px;    
     color: #666;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .speechless-post .region {}
 
 .speechless-post .main {
-    overflow: hidden;
+    flex: 1;
+    width: 1px;
 }
 
 .speechless-post .retweet {
@@ -74,11 +78,8 @@ div[i-am-music-player] {
 
 .speechless-post .interactionStats {
     display: flex;
-    justify-content: flex-end;
-}
-
-.speechless-post .interactionStats > div:not(:last-of-type){
-    margin-right: 5px;
+    gap:5px;
+    color: #999;
 }
 
 /* Panel style */
