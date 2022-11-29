@@ -15,6 +15,12 @@
     // 是否手动暂停
     let forcePause = false
 
+    // 拉取间隔时间
+    let interval = 1000
+
+    // 上一次拉取时间
+    let lastFetchTimeStamp = 0
+
     const body = $('body')
     let $progressCount
     let $progressBar
@@ -47,8 +53,9 @@
                 }
             })
         }
-
     }
+
+
 
     // 从 URL 中获取 ID，注意不是 UID
     const getIDFromURL = function () {
@@ -62,18 +69,32 @@
         return id
     }
 
+    const delay = function (timeout) {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, timeout);
+        })
+    }
+
     // 声明fetch方法
-    const fetchData = function (config) {
+    const fetchData = async function (config) {
         let url = config.url
         let param = config.parameters || {}
+        
+        let offset = parseInt(new Date().valueOf()) - lastFetchTimeStamp        
+        if (offset < interval) {
+            let delayMS = interval - offset
+            console.log(`Delay of ${delayMS} milliseconds`)
+            await delay(delayMS)            
+        }
 
         return new Promise((resolve, reject) => {
             let method = config.method || 'get'
+            lastFetchTimeStamp = parseInt(new Date().valueOf())
             $.ajax({
                 type: method.toUpperCase(),
                 url,
                 data: param,
-                success: function (response) {                    
+                success: function (response) {
                     resolve(response.data)
                 },
                 error: function (error) {
@@ -259,7 +280,7 @@
 
     // 主要的拉取逻辑
     const mainFetch = async function () {
-    
+
         beginToFetch()
         clearTheBody()
         await fetchPost()
@@ -273,7 +294,8 @@
         // fetch posts
         while (loadMore && !forcePause) {
             try {
-                console.log('blog',blogCount ++ , getDate(new Date().valueOf(), true))
+                console.log('blog', blogCount++, getDate(new Date().valueOf(), true))
+
                 let data = await fetchData({
                     url: GetPostsURL,
                     parameters: {
@@ -301,7 +323,7 @@
                             }
                         }
                         try {
-                            console.log('longtext',longtextCount ++ , getDate(new Date().valueOf(), true))
+                            console.log('longtext', longtextCount++, getDate(new Date().valueOf(), true))
                             let longtextData = await fetchData(reqParam)
                             post.text = longtextData.longTextContent || ''
                         }
@@ -315,7 +337,7 @@
                             }
                         }
                         try {
-                            console.log('longtext',longtextCount ++ , getDate(new Date().valueOf(), true))
+                            console.log('longtext', longtextCount++, getDate(new Date().valueOf(), true))
                             let longtextData = await fetchData(reqParam)
                             post.retweeted_status.text = longtextData.longTextContent || ''
                         }
@@ -337,7 +359,7 @@
         getInfo()
         initThePanel(uid)
 
-        
+
     }
     init()
 
