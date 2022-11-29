@@ -36,7 +36,11 @@ Chrome 并没有为 Extension 提供直接导出 PDF 的 Api，但是可以借�
 - 愿人人都有自由表达的权利。
 
 ## 更新
-
+### version 1.2 
+- 增加了默认的拉取时间间隔，以避免拉取过于频繁被微博限制的问题。但目前的方法仍不是最优解法，尚有较大优化空间
+- 增加了拉取完成后，手动选择图片裁切样式的操作
+- 增加了拉取完成后，手动选择是否展示 转、赞、评 信息的操作 [@rickypeng99](https://github.com/rickypeng99)
+- 增加了拉取过程中暂停的操作
 ### version 1.1 
 - 使用 Weibo API 获取用户 UID 和用户名 [@jingfelix](https://github.com/jingfelix)
 - 修复了 icon name 错误的大小写问题  [@jjhhms](https://github.com/jjhhms)
