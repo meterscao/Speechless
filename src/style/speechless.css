@@ -22,6 +22,7 @@ div[i-am-music-player] {
     color: #000!important;   
     background: #fff !important;
 }
+
 .speechless-post {
     font-size:14px;
     line-height: 24px;
@@ -29,6 +30,7 @@ div[i-am-music-player] {
     padding-bottom: 10px;
     margin-bottom: 10px;
     overflow: hidden;
+    display: flex;
 }
 
 .speechless-post .text img,
@@ -41,21 +43,25 @@ div[i-am-music-player] {
 }
 
 .speechless-post .meta {
-    width: 140px;
-    float: left;
+    width: 150px;    
     color: #666;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .speechless-post .region {}
 
 .speechless-post .main {
-    overflow: hidden;
+    flex: 1;
+    width: 1px;
 }
 
 .speechless-post .retweet {
     background: #f1f1f1;
     padding: 8px;
     margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .speechless-post .media {
@@ -66,9 +72,22 @@ div[i-am-music-player] {
 }
 
 .speechless-post .media img {
-    width: 150px;
+    
     object-fit: cover;
     height: 150px;
+}
+
+.speechless-post .interactionStats {
+    display: none;
+}
+
+.speechless-list.cropimage .media img{
+    width: 150px;
+}
+.speechless-list.showinteraction .interactionStats {
+    display: flex;
+    gap:5px;
+    color: #999;
 }
 
 /* Panel style */
@@ -133,6 +152,10 @@ div[i-am-music-player] {
 .speechless .item-center{
     display: flex;
     align-items: center;
+    
+}
+
+.speechless .content-between{    
     justify-content: space-between;
 }
 
@@ -147,11 +170,15 @@ div[i-am-music-player] {
     display: inline-block;
     background: rgb(4, 194, 118);
     flex-shrink: 0;
-
-    /* box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px,rgba(51, 65, 85, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.05) 0px 1px 2px 0px; */
 }
 .speechless-button:hover{
     background: rgba(4, 194, 118,0.9);
+}
+.speechless-button.blue{
+    background: rgb(49, 129, 203);
+}
+.speechless-button.blue:hover{
+    background: rgba(49, 129, 203,0.9);
 }
 
 .speechless-main {
@@ -170,6 +197,31 @@ div[i-am-music-player] {
     background: rgba(4, 194, 118,0.8);
     bottom:-1px;
     left:0;
+}
+.speechless-interact{
+    padding-top:5px;
+}
+.speechless-config{
+    
+}
+.speechless-config-item{
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+    padding-top:10px;
+    line-height: 22px;
+    padding-left:3px;
+}
+.speechless-config-label{
+    font-size:14px;
+}
+.speechless-config-description{
+    padding-left:17px;
+    color:#666;
+    font-size: 13px;
+}
+.speechless-config-checkbox{
+    padding:3px;    
+    margin:0 3px 0 0;
 }
 
 
