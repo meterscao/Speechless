@@ -22,6 +22,7 @@ div[i-am-music-player] {
     color: #000!important;   
     background: #fff !important;
 }
+
 .speechless-post {
     font-size:14px;
     line-height: 24px;
@@ -71,12 +72,19 @@ div[i-am-music-player] {
 }
 
 .speechless-post .media img {
-    width: 150px;
+    
     object-fit: cover;
     height: 150px;
 }
 
 .speechless-post .interactionStats {
+    display: none;
+}
+
+.speechless-list.cropimage .media img{
+    width: 150px;
+}
+.speechless-list.showinteraction .interactionStats {
     display: flex;
     gap:5px;
     color: #999;
@@ -144,6 +152,10 @@ div[i-am-music-player] {
 .speechless .item-center{
     display: flex;
     align-items: center;
+    
+}
+
+.speechless .content-between{    
     justify-content: space-between;
 }
 
@@ -188,6 +200,28 @@ div[i-am-music-player] {
 }
 .speechless-interact{
     padding-top:5px;
+}
+.speechless-config{
+    
+}
+.speechless-config-item{
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+    padding-top:10px;
+    line-height: 22px;
+    padding-left:3px;
+}
+.speechless-config-label{
+    font-size:14px;
+}
+.speechless-config-description{
+    padding-left:17px;
+    color:#666;
+    font-size: 13px;
+}
+.speechless-config-checkbox{
+    padding:3px;    
+    margin:0 3px 0 0;
 }
 
 

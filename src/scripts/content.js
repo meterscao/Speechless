@@ -227,15 +227,30 @@
         $speechlessMain.html('')
 
         if (uid) {
-            $speechlessMain.append(`<div class="speechless-action item-center">
+            $speechlessMain.append(`<div class="speechless-action item-center content-between">
             <span class="speechless-tips">📦 把<span class="speechless-username">@${username}</span>的记忆打包...</span><span class="speechless-button" id="doSpeechless">开始</span>
             </div>`)
             $speechlessMain.append(`<div class="speechless-fetching" style="display:none;">
-            <div class="item-center"><span class="speechless-tips">📡 正在努力回忆中...</span></div>
+            <div class="item-center content-between"><span class="speechless-tips">📡 正在努力回忆中...</span></div>
             <div class="speechless-progress"><div class="speechless-progress-bar"></div></div>
-            <div class="item-center speechless-interact"><span class="speechless-count"">0/0</span><span class="speechless-button blue" id="doForcePause">暂停</span></div>
+            <div class="item-center content-between speechless-interact"><span class="speechless-count"">0/0</span><span class="speechless-button blue" id="doForcePause">暂停</span></div>
             </div>`)
-            $speechlessMain.append(`<div class="speechless-done item-center" style="display:none;"><span class="speechless-tips">🖨 只能回想起这么多了...</span><span class="speechless-button" id="doSavepdf">保存为 PDF</span></div>`)
+            $speechlessMain.append(`<div class="speechless-done " style="display:none;">
+                <div class="item-center content-between">
+                    <span class="speechless-tips">🖨 只能回想起这么多了...</span><span class="speechless-button" id="doSavepdf">保存为 PDF</span>
+                </div>
+                <div class="speechless-config">                    
+                    <div class="speechless-config-item">
+                        <div class="speechless-config-label"><label class="item-center"><input type="checkbox" name="ifCropImage" id="ifCropImage" class="speechless-config-checkbox" checked="checked" />裁切图片</label></div>
+                        <div class="speechless-config-description">裁切微博中的图片，更易于清晰的排版</div>
+                    </div>
+                    <div class="speechless-config-item">
+                        <div class="speechless-config-label"><label class="item-center"><input type="checkbox" name="ifShowInteraction" id="ifShowInteraction" class="speechless-config-checkbox" />显示转赞评</label></div>
+                        <div class="speechless-config-description">显示微博的转发、点赞、评论数</div>
+                    </div>
+                    
+                </div>
+            </div>`)
 
             $progressCount = $('.speechless-count')
             $progressBar = $('.speechless-progress-bar')
@@ -255,6 +270,25 @@
                 }
 
             })
+
+            $(document).on('change','#ifCropImage',function(){                
+                if(!this.checked){                    
+                    $speechlessList.removeClass('cropimage')
+                }
+                else{
+                    $speechlessList.addClass('cropimage')
+                }
+            })
+
+            $(document).on('change','#ifShowInteraction',function(){
+                if(!this.checked){                    
+                    $speechlessList.removeClass('showinteraction')
+                }
+                else{
+                    $speechlessList.addClass('showinteraction')
+                }
+            })
+
         }
         else {
             $speechlessMain.append(`😵‍💫 请进入个人主页，刷新页面后使用`)
@@ -295,7 +329,7 @@
         $(".WB_miniblog").remove()
         $("#app").remove()
         $("#WB_webchat").remove()
-        $('body').append(`<div class="speechless-list"></div>`)
+        $('body').append(`<div class="speechless-list cropimage"></div>`)
         $speechlessList = $('.speechless-list')
     }
 
