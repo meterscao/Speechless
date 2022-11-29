@@ -12,12 +12,25 @@
     let count = 0
     let loadMore = true
 
+    // 是否手动暂停
+    let forcePause = false
+
+    // 拉取间隔时间
+    let interval = 1000
+
+    // 上一次拉取时间
+    let lastFetchTimeStamp = 0
+
     const body = $('body')
     let $progressCount
     let $progressBar
     let $speechlessList
     let $speechlessPanel
     let $speechlessMain
+
+    let blogCount = 0
+    let longtextCount = 0
+
 
     const emojiMap = new Map()
     emojiMap.set('default', '🤐')
@@ -27,7 +40,7 @@
     // 使用 Weibo API 获取用户 UID 和用户名
     const getInfo = function () {
         id = getIDFromURL()
-        if(id){
+        if (id) {
             $.ajax({
                 async: false,
                 type: 'GET',
@@ -40,10 +53,11 @@
                 }
             })
         }
-        
     }
 
-    // 从URL中获取ID，注意不是UID
+
+
+    // 从 URL 中获取 ID，注意不是 UID
     const getIDFromURL = function () {
         let id
         let url = location.href
@@ -54,20 +68,33 @@
         console.log('id from url is: ', id)
         return id
     }
-    
+
+    const delay = function (timeout) {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, timeout);
+        })
+    }
+
     // 声明fetch方法
-    const fetchData = function (config) {
+    const fetchData = async function (config) {
         let url = config.url
         let param = config.parameters || {}
+        
+        let offset = parseInt(new Date().valueOf()) - lastFetchTimeStamp        
+        if (offset < interval) {
+            let delayMS = interval - offset
+            console.log(`Delay of ${delayMS} milliseconds`)
+            await delay(delayMS)            
+        }
 
         return new Promise((resolve, reject) => {
             let method = config.method || 'get'
+            lastFetchTimeStamp = parseInt(new Date().valueOf())
             $.ajax({
                 type: method.toUpperCase(),
                 url,
                 data: param,
                 success: function (response) {
-                    console.log(response)
                     resolve(response.data)
                 },
                 error: function (error) {
@@ -79,10 +106,11 @@
     }
 
     // 格式化时间
-    const getDate = function (dateString) {
+    const getDate = function (dateString, showSecond) {
         let date = new Date(dateString)
         let hour = date.getHours()
         let minute = date.getMinutes()
+        let second = date.getSeconds()
         let year = date.getFullYear()
         let month = date.getMonth() + 1
         let day = date.getDate()
@@ -93,7 +121,7 @@
             }
             else return num.toString()
         }
-        return year + '/' + fillWithZero(month) + '/' + fillWithZero(day) + ' ' + fillWithZero(hour) + ':' + fillWithZero(minute)
+        return year + '/' + fillWithZero(month) + '/' + fillWithZero(day) + ' ' + fillWithZero(hour) + ':' + fillWithZero(minute) + (showSecond ? (':' + fillWithZero(second)) : '')
 
     }
 
@@ -178,9 +206,9 @@
 
     // 初始化面板
     const initThePanel = function (uid) {
-        
-        
-        if(!$speechlessPanel){
+
+
+        if (!$speechlessPanel) {
             body.append(`<div class="speechless">
             <div class="speechless-head">
             <span class="speechless-logo">🤐</span>
@@ -192,26 +220,36 @@
             $speechlessPanel = $('.speechless');
             $speechlessMain = $('.speechless-main');
         }
-        $speechlessMain.html('')        
+        $speechlessMain.html('')
 
         if (uid) {
             $speechlessMain.append(`<div class="speechless-action item-center">
             <span class="speechless-tips">📦 把<span class="speechless-username">@${username}</span>的记忆打包...</span><span class="speechless-button" id="doSpeechless">开始</span>
             </div>`)
             $speechlessMain.append(`<div class="speechless-fetching" style="display:none;">
-            <div class="item-center"><span class="speechless-tips">📡 正在努力回忆中...</span><span class="speechless-count"">0/0</span></div>
+            <div class="item-center"><span class="speechless-tips">📡 正在努力回忆中...</span></div>
             <div class="speechless-progress"><div class="speechless-progress-bar"></div></div>
+            <div class="item-center speechless-interact"><span class="speechless-count"">0/0</span><span class="speechless-button blue" id="doForcePause">暂停</span></div>
             </div>`)
             $speechlessMain.append(`<div class="speechless-done item-center" style="display:none;"><span class="speechless-tips">🖨 只能回想起这么多了...</span><span class="speechless-button" id="doSavepdf">保存为 PDF</span></div>`)
 
             $progressCount = $('.speechless-count')
             $progressBar = $('.speechless-progress-bar')
 
-            $(document).on('click', "#doSpeechless", function () {
+            $(document).on('click', "#doSpeechless", function (e) {
                 mainFetch()
             });
             $(document).on('click', "#doSavepdf", function () {
                 window.print()
+            })
+
+            $(document).on('click', '#doForcePause', function (e) {
+                forcePause = !forcePause
+                $(this).text(forcePause ? '继续' : '暂停')
+                if (!forcePause) {
+                    fetchPost()
+                }
+
             })
         }
         else {
@@ -229,11 +267,15 @@
     }
 
     // 拉取完成时，面板的状态
-    const fetchFinished = function () {
-        $('.speechless-action').hide()
-        $('.speechless-fetching').hide()
-        $('.speechless-done').show()
-        switchEmoji('done')
+    const checkIfFinished = function () {
+        if (forcePause) return
+        else {
+            $('.speechless-action').hide()
+            $('.speechless-fetching').hide()
+            $('.speechless-done').show()
+            switchEmoji('done')
+        }
+
     }
 
     // 更新进度条
@@ -257,15 +299,21 @@
     // 主要的拉取逻辑
     const mainFetch = async function () {
 
-        const GetPostsURL = `https://weibo.com/ajax/statuses/mymblog`
-        const GetLongTextURL = `https://weibo.com/ajax/statuses/longtext`
-
         beginToFetch()
         clearTheBody()
+        await fetchPost()
 
+    }
+
+    // 循环遍历的逻辑
+    const fetchPost = async function () {
+        const GetPostsURL = `https://weibo.com/ajax/statuses/mymblog`
+        const GetLongTextURL = `https://weibo.com/ajax/statuses/longtext`
         // fetch posts
-        while (loadMore) {
+        while (loadMore && !forcePause) {
             try {
+                console.log('blog', blogCount++, getDate(new Date().valueOf(), true))
+
                 let data = await fetchData({
                     url: GetPostsURL,
                     parameters: {
@@ -293,6 +341,7 @@
                             }
                         }
                         try {
+                            console.log('longtext', longtextCount++, getDate(new Date().valueOf(), true))
                             let longtextData = await fetchData(reqParam)
                             post.text = longtextData.longTextContent || ''
                         }
@@ -306,6 +355,7 @@
                             }
                         }
                         try {
+                            console.log('longtext', longtextCount++, getDate(new Date().valueOf(), true))
                             let longtextData = await fetchData(reqParam)
                             post.retweeted_status.text = longtextData.longTextContent || ''
                         }
@@ -318,12 +368,16 @@
                 console.log(err)
             }
         }
-        fetchFinished()
+
+        checkIfFinished()
+
     }
 
-    const init = function(){
+    const init = function () {
         getInfo()
         initThePanel(uid)
+
+
     }
     init()
 
