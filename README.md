@@ -5,7 +5,16 @@
 
 Speechless 是一个帮助新浪微博用户，把微博内容导出成 PDF 进行本地备份的 Chrome Extension。
 
-[添加到 Chrome](https://chrome.google.com/webstore/detail/speechless-%E5%BE%AE%E5%8D%9A%E5%A4%87%E4%BB%BD/igilfpckopigflpafgoajlljpdhmoall)
+## 使用
+
+- 通过 Chrome Web Store 安装（推荐）
+
+  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/igilfpckopigflpafgoajlljpdhmoall?color=green&label=Chrome%20Web%20Store&logo=google%20chrome&logoColor=white)](https://chrome.google.com/webstore/detail/speechless-%E5%BE%AE%E5%8D%9A%E5%A4%87%E4%BB%BD/igilfpckopigflpafgoajlljpdhmoall)
+
+- 下载插件包本地载入
+
+  [![GitHub release (latest by date)](https://img.shields.io/github/v/release/meterscao/speechless?color=green&label=Latest%20release&logo=github)](https://github.com/meterscao/Speechless/releases)
+
 
 ## 简介
 ![ScreenShots](https://user-images.githubusercontent.com/1685497/202354135-41665c56-c77d-4ef7-8a10-fdcbc42be822.png)
