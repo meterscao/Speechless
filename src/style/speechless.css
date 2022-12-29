@@ -92,6 +92,7 @@ div[i-am-music-player] {
 
 /* Panel style */
 .speechless {
+    opacity: 0.5;
     color:rgb(15,23,42);
     position: fixed;
     width: 360px;
@@ -110,6 +111,15 @@ div[i-am-music-player] {
     font-size: 14px;
     line-height: 24px;
     transition: top 0.3s linear;
+}
+.speechless:hover {
+    opacity: 1.0;
+}
+.speechless.invisible {
+    opacity: 0;
+}
+.speechless.invisible:hover {
+    opacity: 1.0;
 }
 
 .speechless-progress {

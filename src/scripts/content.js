@@ -241,6 +241,10 @@
                 </div>
                 <div class="speechless-config">                    
                     <div class="speechless-config-item">
+                        <div class="speechless-config-label"><label class="item-center"><input type="checkbox" name="ifOnlyVisibleOnHover" id="ifOnlyVisibleOnHover" class="speechless-config-checkbox" />彻底隐藏面板</label></div>
+                        <div class="speechless-config-description">勾选后这个控制面板将完全透明，只在鼠标悬停时恢复可见。</div>
+                    </div>
+                    <div class="speechless-config-item">
                         <div class="speechless-config-label"><label class="item-center"><input type="checkbox" name="ifCropImage" id="ifCropImage" class="speechless-config-checkbox" checked="checked" />裁切图片</label></div>
                         <div class="speechless-config-description">裁切微博中的图片，更易于清晰的排版</div>
                     </div>
@@ -269,6 +273,14 @@
                     fetchPost()
                 }
 
+            })
+
+            $(document).on('change','#ifOnlyVisibleOnHover',function () {
+                if (!this.checked) {
+                    $speechlessPanel.removeClass('invisible')
+                } else {
+                    $speechlessPanel.addClass('invisible')
+                }
             })
 
             $(document).on('change','#ifCropImage',function(){                
