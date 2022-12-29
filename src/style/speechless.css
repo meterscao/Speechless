@@ -78,14 +78,23 @@ div[i-am-music-player] {
     width: fit-content;
     height: 150px;
 }
+.speechless-post .media img:hover {
+    width: fit-content;
+    height: fit-content;
+}
 
 .speechless-post .interactionStats {
     display: none;
 }
 
-.speechless-list.cropimage .media img{
+.speechless-list.cropimage .media img {
     width: 150px;
 }
+.speechless-list.cropimage .media img:hover {
+    width: fit-content;
+    height: fit-content;
+}
+
 .speechless-list.showinteraction .interactionStats {
     display: flex;
     gap:5px;
