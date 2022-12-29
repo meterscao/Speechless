@@ -68,12 +68,14 @@ div[i-am-music-player] {
     padding-top: 5px;
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     gap: 5px;
+    width: 475px;
 }
 
 .speechless-post .media img {
-    
     object-fit: cover;
+    width: fit-content;
     height: 150px;
 }
 
