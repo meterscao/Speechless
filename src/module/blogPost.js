@@ -9,8 +9,20 @@ let total = 0
 let count = 0
 let loadMore = true
 let forcePause = false
-let uid
 let speechlessListEL
+
+// 拉取间隔时间
+let interval = 1000
+
+// 上一次拉取时间
+let lastFetchTimeStamp = 0
+
+
+const delay = function (timeout) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, timeout);
+    })
+}
 
 // 每添加一个卡片，就要更新一次页面的状态
 const updateWholePageState = function () {
@@ -19,6 +31,7 @@ const updateWholePageState = function () {
     // setProgress()
 }
 
+// 把页面上的其他元素移除，并且初始化挂载节点
 const generateHTML = function () {
     document.getElementById('app').remove()
     speechlessListEL = document.createElement('div')
@@ -90,7 +103,7 @@ const appendPostToBody = function (post) {
         }
         mediaHTML += '</div>'
     }
-    
+
     let postHTML = `
         ${metaHTML}
         <div class="main">
@@ -108,6 +121,7 @@ const appendPostToBody = function (post) {
 
 }
 
+// 拉取数据，并且格式化
 const doFetch = async function (parameters) {
     if (!parameters) parameters = {}
     const fetchResp = await axios.get(GetPostsApiURL, {
@@ -117,9 +131,8 @@ const doFetch = async function (parameters) {
     try {
         let resp = fetchResp.data.data
         let list = resp.list
-        await formatPosts(list,parameters.uid)
+        await formatPosts(list, parameters.uid)
         return resp
-
     }
     catch (err) {
         console.error(err)
@@ -128,11 +141,11 @@ const doFetch = async function (parameters) {
 }
 
 // 处理每一批的列表
-const formatPosts = async function (posts,uid) {
+const formatPosts = async function (posts, uid) {
     let _list = []
-    
-    for (let post of posts) {        
-        if (post.user.id != uid) continue;        
+
+    for (let post of posts) {
+        if (post.user.id != uid) continue;
         if (!!post.isLongText) {
             try {
                 let longtextData = await fetchLongText(post.mblogid)
@@ -155,72 +168,77 @@ const formatPosts = async function (posts,uid) {
 }
 
 
-const getMonthParameters = function(ymstr){
+// 补充按照月份拉取的数据参数
+const getMonthParameters = function (ymstr) {
     let result = ymstr.split('|')
     let y = result[0]
     let m = result[1]
     return {
         displayYear: y,
-        curMonth:m,
-        stat_date: '' + y + (m<10?'0':'') + m 
+        curMonth: m,
+        stat_date: '' + y + (m < 10 ? '0' : '') + m
     }
 
 }
 
 
-const getRangeMonths = function(yearMap,range){
-    if(!yearMap) return []
-    if(!range) return []
+// 根据选择的月份区间 和 用户的微博月份区间 得到一个有效的月份区间
+const getRangeMonths = function (yearMap, range) {
+    if (!yearMap) return []
+    if (!range) return []
 
-    let historyMonths = []    
-    for(let y = range.start.year ; y <= range.end.year ; y++){
-        for(let m = 1 ;  m <= 12  ; m++){
-            if(y == range.start.year && m < range.start.month) continue
-            if(y == range.end.year && m > range.end.month) break            
-            historyMonths.push(`${y}|${m}`)            
+    let historyMonths = []
+    for (let y = range.start.year; y <= range.end.year; y++) {
+        for (let m = 1; m <= 12; m++) {
+            if (y == range.start.year && m < range.start.month) continue
+            if (y == range.end.year && m > range.end.month) break
+            historyMonths.push(`${y}|${m}`)
         }
     }
 
     let mapMonths = []
-    for (const year in yearMap) {        
+    for (const year in yearMap) {
         const monthsInYear = yearMap[year];
-        mapMonths = mapMonths.concat([],monthsInYear.map(month => {
+        mapMonths = mapMonths.concat([], monthsInYear.map(month => {
             return `${year}|${month}`
         }))
     }
-    
-    let rangeMonths = mapMonths.filter(function(m){ return historyMonths.indexOf(m) > -1 })
-    console.log('rangeMonths :' ,rangeMonths)
 
+    let rangeMonths = mapMonths.filter(function (m) { return historyMonths.indexOf(m) > -1 })
+    console.log('rangeMonths :', rangeMonths)
+    if (rangeMonths.length > 0) {
+        rangeMonths = rangeMonths.reverse()
+    }
     return rangeMonths
 
 }
 
-export const fetchPost = async function (parameters,rangeConfig) {
+// 拉取主要函数
+export const fetchPost = async function (parameters, rangeConfig) {
 
     generateHTML()
 
-    let {uid,feature} = parameters
-    let {yearMap,range} = rangeConfig
+    let { uid, feature } = parameters
+    let { isByRange, yearMap, range } = rangeConfig
 
-    console.log('yearMap',yearMap)
-    console.log('range',range)
+    console.log('yearMap', yearMap)
+    console.log('range', range)
 
-    let rangeMonths = getRangeMonths(yearMap,range)
+    let rangeMonths = getRangeMonths(yearMap, range)
     let rangeIndex = 0
     let rangeParams = {}
 
     // 0|全部 1|原创
-    let sourceType = parameters.feature || 0    
+    let sourceType = parameters.feature || 0
 
     let requestParam = {
         uid,
         feature,
     }
 
-    while (loadMore && page < 5) {
-        if(range){
-            if(rangeMonths.length == 0) break
+    while (loadMore) {
+        if (isByRange) {
+            if (!rangeMonths[rangeIndex]) break
             rangeParams = getMonthParameters(rangeMonths[rangeIndex])
         }
         let respData = await doFetch({
@@ -229,18 +247,33 @@ export const fetchPost = async function (parameters,rangeConfig) {
             since_id,
             page
         })
-        if (respData) {            
-            //  如果是原创
-            if (sourceType == 1) {
-                loadMore = respData.total == -1
-            }
-            // 如果是全部
-            else {
+
+        page++
+
+        if (respData) {
+
+            if (respData.total > 0) {
                 since_id = respData.since_id
                 total = respData.total
                 loadMore = !!respData.since_id
             }
+
+            else if (respData.total == -1) {
+
+            }
+
+            else if (!respData.total) {
+                // 如果是按照月份，需要拉下一个月份
+                if (isByRange) {
+                    rangeIndex++
+                    page = 1
+
+                }
+                else {
+                    loadMore = false
+                }
+            }
         }
-        page++
+
     }
 }
