@@ -73,6 +73,15 @@
                     </div>
                 </div>
             </template>
+
+            <!-- 拉取完毕 -->
+            <template v-if="state == 'DONE'">
+                <div>导出成功</div>
+                <div class="border-t border-gray-200 mt-4 pt-4">
+                    <button type="button" @click="eventFetchPosts"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">重新开始</button>
+                </div>
+            </template>
         </div>
 
     </div>
@@ -119,7 +128,7 @@ export default {
             OptionsWeiboImageScale,
 
             // 
-            state: 'DEFAULT',
+            state: 'DONE',
 
             //
             id: '',
@@ -158,9 +167,6 @@ export default {
                 this.pendingWording += ` 全部微博`
             }
 
-
-            return 
-
             let posts = await fetchPost({
                 uid: this.uid,
                 feature: this.weiboSourceType,
@@ -179,7 +185,14 @@ export default {
             this.weiboRange = e.range
         },
         eventSavePDF() {
-            window.print()
+            setTimeout(() => {
+                console.log(11)
+                this.state = 'DONE'
+            }, 400);
+            setTimeout(()=>{
+                window.print()
+            },10)
+            
         }
     }
 

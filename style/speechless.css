@@ -86,6 +86,9 @@ div[i-am-music-player] {
 
 /* Print */
 @media print {
+    html,body{
+        background: #fff !important;
+    }
     .speechless-post .media {
         page-break-inside: avoid;
     }
