@@ -77,7 +77,7 @@
             <!-- 拉取完毕 -->
             <template v-if="state == 'DONE'">
                 <div class="text-sm text-center text-slate-600">帮到你了？请我喝杯奶茶吧</div>
-                <div class="pt-2"><img class="rounded-md block overflow-hidden" src="https://i.328888.xyz/2023/02/18/XZRTJ.md.jpeg" /> </div>
+                <div class="pt-2"><img class="rounded-md block overflow-hidden" :src="donateImageURL" /> </div>
                 <div class="border-t border-gray-200 mt-4 pt-2 text-center">
                     <label @click="eventRefresh"
                         class="inline-flex items-center py-2 px-4 text-sm font-medium text-orange-500 hover:hover:text-orange-600 cursor-pointer">重新开始</label>                        
@@ -100,6 +100,8 @@ import { fetchPost } from './module/blogPost'
 const OptionsWeiboTimeRange = ['全部时间', '指定时间范围']
 const OptionsWeiboSourceType = ['全部微博', '原创微博']
 const OptionsWeiboImageScale = ['缩略图', '大图']
+
+
 
 export default {
 
@@ -147,7 +149,9 @@ export default {
             years: null,
             yearMap: null,
 
-            pendingWording: ''
+            pendingWording: '',
+
+            donateImageURL:window.donateImageURL
         }
     },
     methods: {

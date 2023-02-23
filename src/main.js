@@ -11,6 +11,8 @@ const createRootNode = function(){
     document.body.append(rootNode)
 }
 
+window.donateImageURL = chrome.runtime.getURL("medias/donate_code.png");
+
 createRootNode()
 
 const app = createApp(App)
