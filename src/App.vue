@@ -76,10 +76,11 @@
 
             <!-- 拉取完毕 -->
             <template v-if="state == 'DONE'">
-                <div>导出成功</div>
-                <div class="border-t border-gray-200 mt-4 pt-4">
-                    <button type="button" @click="eventFetchPosts"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">重新开始</button>
+                <div class="text-sm text-center text-slate-600">帮到你了？请我喝杯奶茶吧</div>
+                <div class="pt-2"><img class="rounded-md block overflow-hidden" src="https://i.328888.xyz/2023/02/18/XZRTJ.md.jpeg" /> </div>
+                <div class="border-t border-gray-200 mt-4 pt-2 text-center">
+                    <label @click="eventRefresh"
+                        class="inline-flex items-center py-2 px-4 text-sm font-medium text-orange-500 hover:hover:text-orange-600 cursor-pointer">重新开始</label>                        
                 </div>
             </template>
         </div>
@@ -128,7 +129,7 @@ export default {
             OptionsWeiboImageScale,
 
             // 
-            state: 'DONE',
+            state: 'DEFAULT',
 
             //
             id: '',
@@ -156,16 +157,24 @@ export default {
 
         async eventFetchPosts() {
             this.state = 'PENDING'
-            this.pendingWording = `正在导出 ${this.username} `
+            
+            this.pendingWording = `正在导出 @${this.username} `
+            let documentTitle = `@${this.username}`
             if (this.weiboRangeType == 1) {
                 this.pendingWording += `${this.weiboRange.start.year}年${this.weiboRange.start.month}月 - ${this.weiboRange.end.year}年${this.weiboRange.end.month}月`
+                documentTitle += `_${this.weiboRange.start.year}${this.weiboRange.start.month}-${this.weiboRange.end.year}${this.weiboRange.end.month}`
             }
             if (this.weiboSourceType == 1) {
                 this.pendingWording += ` 原创微博`
+                documentTitle += `_原创微博`
             }
             else {
                 this.pendingWording += ` 全部微博`
+                documentTitle += `_全部微博`
             }
+
+            
+            document.title = documentTitle
 
             let posts = await fetchPost({
                 uid: this.uid,
@@ -185,14 +194,16 @@ export default {
             this.weiboRange = e.range
         },
         eventSavePDF() {
-            setTimeout(() => {
-                console.log(11)
+            setTimeout(() => {                
                 this.state = 'DONE'
-            }, 400);
+            }, 1)
             setTimeout(()=>{
                 window.print()
             },10)
             
+        },
+        eventRefresh(){
+            location.reload()
         }
     }
 
