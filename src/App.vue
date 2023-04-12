@@ -163,6 +163,7 @@ export default {
             // 0|全部 1|原创
             weiboSourceType: 1,
             weiboRangeType: 0,
+
             weiboImageScaleType: 0,
             weiboRange: null,
             weiboRangeisValid: true,
@@ -199,25 +200,27 @@ export default {
                 documentTitle += `_全部微博`
             }
 
-
             document.title = documentTitle
 
             let posts = await fetchPost({
                 uid: this.uid,
-                feature: this.weiboSourceType,
-
-            }, {
-                isByRange: !!this.weiboRangeType,
-                yearMap: this.yearMap,
-                range: this.weiboRange
+                sourceType: this.weiboSourceType, // ALL ORIGINAL
+                rangeType: this.weiboRangeType, // ALL RANGE            
+                starttime: '',
+                endtime: ''
             })
+            
             this.state = 'SAVING'
 
         },
         eventRangeChanged(e) {
             this.weiboRangeisValid = e.is_valid
             if (!e.is_valid) return
+
             this.weiboRange = e.range
+
+            console.log(this.weiboRange.start)
+            console.log(this.weiboRange.end)
         },
         eventSavePDF() {
             setTimeout(() => {
