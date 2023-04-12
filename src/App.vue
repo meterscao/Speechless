@@ -163,10 +163,11 @@ export default {
             // 0|全部 1|原创
             weiboSourceType: 1,
             weiboRangeType: 0,
-
-            weiboImageScaleType: 0,
-            weiboRange: null,
+            weiboRange:null,
+            weiboImageScaleType: 0,            
             weiboRangeisValid: true,
+            start:null,
+            end:null,
 
             //
             years: null,
@@ -206,8 +207,8 @@ export default {
                 uid: this.uid,
                 sourceType: this.weiboSourceType, // ALL ORIGINAL
                 rangeType: this.weiboRangeType, // ALL RANGE            
-                starttime: '',
-                endtime: ''
+                starttime: this.start,
+                endtime: this.end
             })
             
             this.state = 'SAVING'
@@ -218,6 +219,9 @@ export default {
             if (!e.is_valid) return
 
             this.weiboRange = e.range
+
+            this.start = e.range.start
+            this.end = e.range.end
 
             console.log(this.weiboRange.start)
             console.log(this.weiboRange.end)
