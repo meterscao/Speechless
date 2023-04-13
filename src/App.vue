@@ -218,9 +218,6 @@ export default {
             let endY = lastYear
             let endM = lastYearMonths[lastYearMonths.length - 1]
 
-            console.log(startY, startM)
-            console.log(endY, endM)
-
             this.weiboRange = {
                 start: {
                     year: startY,
@@ -270,7 +267,6 @@ export default {
 
                 if (this.total > 0) {
                     this.progress = Math.floor((parseFloat(this.count) / parseFloat(this.total)) * 100)
-                    console.log(this.progress)
                 }
             })
 

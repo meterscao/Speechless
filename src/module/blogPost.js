@@ -1,14 +1,14 @@
 import axios from "axios"
-import { fetchLongText } from './longText'
 
 const GetPostsByRangeApiURL = `https://weibo.com/ajax/statuses/searchProfile`
+const GetLongTextURL = `https://weibo.com/ajax/statuses/longtext`
 
 let page = 1
 let total = 0
 let count = 0
 let loadMore = true
 let speechlessListEL
-let starttime 
+let starttime
 let endtime
 let _callback
 
@@ -30,7 +30,7 @@ const updateWholePageState = function () {
     window.scrollTo(0, document.body.scrollHeight);
     count++
     _callback({
-        type:'count',
+        type: 'count',
         value: count
     })
 }
@@ -121,7 +121,17 @@ const appendPostToBody = function (post) {
 
 // 拉取数据，并且格式化
 const doFetch = async function (parameters) {
+
     if (!parameters) parameters = {}
+    
+    let offset = parseInt(new Date().valueOf()) - lastFetchTimeStamp
+    if (offset < interval) {
+        let delayMS = interval - offset
+        console.log(`Delay of ${delayMS} milliseconds`)
+        await delay(delayMS)
+    }
+
+    lastFetchTimeStamp = parseInt(new Date().getTime())
     const fetchResp = await axios.get(GetPostsByRangeApiURL, {
         params: parameters
     })
@@ -130,7 +140,7 @@ const doFetch = async function (parameters) {
         let resp = fetchResp.data.data
         let list = resp.list
         _callback({
-            type:'total',
+            type: 'total',
             value: resp.total
         })
         await formatPosts(list, parameters.uid)
@@ -170,37 +180,39 @@ const formatPosts = async function (posts, uid) {
 }
 
 
-// 补充按照月份拉取的数据参数
-const getMonthParameters = function (ymstr) {
-    let result = ymstr.split('|')
-    let y = result[0]
-    let m = result[1]
-    return {
-        displayYear: y,
-        curMonth: m,
-        stat_date: '' + y + (m < 10 ? '0' : '') + m
-    }
-}
-
 function getLastDayTimestamp(obj) {
-    let {year, month} = obj    
-    const nextMonth = parseInt(month) + 1;    
-    const nextMonthFirstDay = new Date(year, nextMonth - 1, 1);    
+    let { year, month } = obj
+    const nextMonth = parseInt(month) + 1;
+    const nextMonthFirstDay = new Date(year, nextMonth - 1, 1);
     nextMonthFirstDay.setHours(0, 0, 0, 0);
     const lastDayTimestamp = nextMonthFirstDay.getTime() - 1;
-    const stamp =  Math.floor(lastDayTimestamp/1000)
+    const stamp = Math.floor(lastDayTimestamp / 1000)
     return stamp
-  }
+}
 
 function getFirstDayTimestamp(obj) {
-    let {year, month} = obj    
+    let { year, month } = obj
     const firstDay = new Date(year, parseInt(month) - 1, 1);
     firstDay.setHours(0, 0, 0, 0);
     const firstDayTimestamp = firstDay.getTime();
-    let stamp =  Math.floor(firstDayTimestamp/1000)
+    let stamp = Math.floor(firstDayTimestamp / 1000)
     return stamp
-  }
-  
+}
+const fetchLongText = async function(postid){
+    let longTextResp = await axios.get(GetLongTextURL,{
+        params:{
+            id: postid
+        }
+    })
+
+    try {
+        return longTextResp.data
+    } catch (error) {
+        return 
+    }
+}
+
+
 
 // 拉取主要函数
 export const fetchPost = async function (parameters, callback) {
@@ -209,14 +221,14 @@ export const fetchPost = async function (parameters, callback) {
     console.log(parameters)
     generateHTML()
 
-    let { uid, sourceType, rangeType, range} = parameters
+    let { uid, sourceType, rangeType, range } = parameters
 
     let requestParam = {
         uid,
         page,
-        feature:4,
+        feature: 4,
     }
-    if(rangeType == 1){
+    if (rangeType == 1) {
         requestParam = {
             ...requestParam,
             starttime: getFirstDayTimestamp(range.start),
@@ -225,23 +237,21 @@ export const fetchPost = async function (parameters, callback) {
     }
 
     console.log(requestParam)
-        
-    
-    while (page < 8 && loadMore) {
-        
-        requestParam.page = page
-        
-        let respData = await doFetch(requestParam)
-        
-        console.log(respData)
 
-        if(respData?.list?.length > 0){
-            total = respData.total            
+
+    while (page < 8 && loadMore) {
+
+        requestParam.page = page
+
+        let respData = await doFetch(requestParam)
+
+        if (respData?.list?.length > 0) {
+            total = respData.total
         }
-        else{
+        else {
             loadMore = false
-        }        
-        page ++
+        }
+        page++
 
     }
 }
