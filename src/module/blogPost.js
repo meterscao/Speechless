@@ -179,20 +179,22 @@ const getMonthParameters = function (ymstr) {
 }
 
 function getLastDayTimestamp(obj) {
-    let {year, month} = obj
-    const nextMonth = month + 1;
-    const nextMonthFirstDay = new Date(year, nextMonth - 1, 1);
+    let {year, month} = obj    
+    const nextMonth = parseInt(month) + 1;    
+    const nextMonthFirstDay = new Date(year, nextMonth - 1, 1);    
     nextMonthFirstDay.setHours(0, 0, 0, 0);
     const lastDayTimestamp = nextMonthFirstDay.getTime() - 1;
-    return Math.floor(lastDayTimestamp/1000);
+    const stamp =  Math.floor(lastDayTimestamp/1000)
+    return stamp
   }
 
 function getFirstDayTimestamp(obj) {
-    let {year, month} = obj
-    const firstDay = new Date(year, month - 1, 1);
+    let {year, month} = obj    
+    const firstDay = new Date(year, parseInt(month) - 1, 1);
     firstDay.setHours(0, 0, 0, 0);
     const firstDayTimestamp = firstDay.getTime();
-    return Math.floor(firstDayTimestamp/1000)
+    let stamp =  Math.floor(firstDayTimestamp/1000)
+    return stamp
   }
   
 
@@ -210,18 +212,18 @@ export const fetchPost = async function (parameters, callback) {
         page,
         feature:4,
     }
-    // if(rangeType == 1){        
+    if(rangeType == 1){
         requestParam = {
             ...requestParam,
             starttime: getFirstDayTimestamp(range.start),
             endtime: getLastDayTimestamp(range.end)
         }
-    // }
+    }
 
     console.log(requestParam)
-        return
+        
     
-    while (page < 10 && loadMore) {
+    while (page < 2 && loadMore) {
         
         requestParam.page = page
         

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label class="block text-base font-medium text-gray-900">{{ title }}</label>
+    <label class="block text-sm font-medium text-gray-900">{{ title }}</label>
     <p v-if="description && description.length > 0" class="text-sm leading-5 text-gray-500">{{ description }}</p>
     <div class="mt-2">
       <select       
