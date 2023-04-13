@@ -44,30 +44,27 @@
 
                     <!-- 拉取数据ing -->
                     <template v-if="state == 'PENDING'">
-                        <div class="text-sm">{{ pendingWording }}</div>
+                        <div class="text-sm font-medium"><label
+                                    class="underline decoration-orange-400 decoration-4 font-medium mr-2">@{{ username }}</label>{{ pendingWording }}</div>
                         <div class="border-t border-gray-200 mt-4 pt-4">
-                            <button type="button" v-if="state == 'PENDING'"
-                                class="w-full flex items-center justify-center px-4 py-2 font-medium leading-6 text-sm shadow rounded-md text-white bg-orange-500 hover:bg-orange-400 transition ease-in-out duration-150 cursor-not-allowed"
-                                disabled="">
-                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                        stroke-width="4">
-                                    </circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg><span>回忆中...</span>
-                            </button>
+                            <div class="flex justify-between">
+                                <span class="text-sm">拼命回忆中...</span>
+                                <span class="text-sm">{{ count }}/{{ total }}</span>
+                            </div>
+                            <div class="bg-zinc-200 h-2 rounded-sm overflow-hidden mt-2">
+                                <div class="h-2 bg-orange-400 transition-all" :style="`width:${progress}%`"></div>
+                            </div>
                         </div>
                     </template>
 
                     <!-- 拉取完毕 -->
                     <template v-if="state == 'SAVING'">
-                        <div>
+                        <div class="text-sm font-medium"><label
+                                    class="underline decoration-orange-400 decoration-4 font-medium mr-2">@{{ username }}</label>{{ pendingWording }}</div>
+                        <div class="border-t border-gray-200 mt-4 pt-4">
                             <SelectNative title="图片显示方式" v-model="weiboImageScaleType" :options="OptionsWeiboImageScale" />
                         </div>
-                        
+
                         <div class="border-t border-gray-200 mt-4 pt-4">
                             <div class="flex gap-3">
                                 <button type="button"
@@ -91,7 +88,7 @@
                 </div>
 
                 <div v-else class="text-center py-5">
-                    获取当前用户信息失败 :-( <br/>请切换到用户主页，再刷新页面重试。
+                    获取当前用户信息失败 :-( <br />请切换到用户主页，再刷新页面重试。
                 </div>
             </template>
         </div>
@@ -134,9 +131,9 @@ export default {
     },
     components: {
         SelectTimeRangeVue,
-        SelectNative        
+        SelectNative
     },
-    
+
     data() {
         return {
 
@@ -156,16 +153,20 @@ export default {
             uid: '',
             username: '',
 
+            total: 0,
+            count: 0,
+            progress: 0,
+
             // 0|全部 1|原创
             weiboSourceType: 1,
             weiboRangeType: 0,
-            weiboRange:null,
+            weiboRange: null,
 
-            weiboImageScaleType: 0,            
+            weiboImageScaleType: 0,
             weiboRangeisValid: true,
 
-            start:null,
-            end:null,
+            start: null,
+            end: null,
 
             //
             years: null,
@@ -181,7 +182,7 @@ export default {
             this.state = 'SELECTRANGE'
         },
 
-        setWeiboRange(){
+        setWeiboRange() {
 
             console.log(this.yearMap)
             let yearsLen = this.years.length || 0
@@ -192,14 +193,14 @@ export default {
             let lastYearMonths = this.yearMap[lastYear]
             let endY = lastYear
             let endM = lastYearMonths[lastYearMonths.length - 1]
-            
-            console.log(startY,startM)
-            console.log(endY,endM)
+
+            console.log(startY, startM)
+            console.log(endY, endM)
 
             this.weiboRange = {
-                start:{
+                start: {
                     year: startY,
-                    month :startM
+                    month: startM
                 },
                 end: {
                     year: endY,
@@ -211,34 +212,48 @@ export default {
         async eventFetchPosts() {
             this.state = 'PENDING'
 
-            this.pendingWording = `正在导出 @${this.username} `
+            this.pendingWording = ''
             let documentTitle = `@${this.username}`
             if (this.weiboRangeType == 1) {
                 this.pendingWording += `${this.weiboRange.start.year}年${this.weiboRange.start.month}月 - ${this.weiboRange.end.year}年${this.weiboRange.end.month}月`
                 documentTitle += `_${this.weiboRange.start.year}${this.weiboRange.start.month}-${this.weiboRange.end.year}${this.weiboRange.end.month}`
             }
             if (this.weiboSourceType == 1) {
-                this.pendingWording += ` 原创微博`
+                this.pendingWording += ` 的原创微博`
                 documentTitle += `_原创微博`
             }
             else {
-                this.pendingWording += ` 全部微博`
+                this.pendingWording += ` 的全部微博`
                 documentTitle += `_全部微博`
             }
 
             document.title = documentTitle
 
-            let posts = await fetchPost({
+            let fetchTask = await fetchPost({
                 uid: this.uid,
                 sourceType: this.weiboSourceType, // 
                 rangeType: this.weiboRangeType, // 
-                range:this.weiboRange
+                range: this.weiboRange
+            }, cb => {
+                switch (cb.type) {
+                    case 'total':
+                        this.total = cb.value
+                        break;
+                    case 'count':
+                        this.count = cb.value
+                        break;
+                }
+
+                if (this.total > 0) {
+                    this.progress = Math.floor((parseFloat(this.count) / parseFloat(this.total)) * 100)
+                    console.log(this.progress)
+                }
             })
-            
+
             this.state = 'SAVING'
 
         },
-        eventRangeChanged(e) {            
+        eventRangeChanged(e) {
             this.weiboRange = e.range
             console.log(this.weiboRange)
         },

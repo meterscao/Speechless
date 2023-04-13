@@ -10,6 +10,7 @@ let loadMore = true
 let speechlessListEL
 let starttime 
 let endtime
+let _callback
 
 // 拉取间隔时间
 let interval = 1000
@@ -28,7 +29,10 @@ const delay = function (timeout) {
 const updateWholePageState = function () {
     window.scrollTo(0, document.body.scrollHeight);
     count++
-    // setProgress()
+    _callback({
+        type:'count',
+        value: count
+    })
 }
 
 // 把页面上的其他元素移除，并且初始化挂载节点
@@ -172,7 +176,6 @@ const getMonthParameters = function (ymstr) {
         curMonth: m,
         stat_date: '' + y + (m < 10 ? '0' : '') + m
     }
-
 }
 
 function getLastDayTimestamp(obj) {
@@ -194,7 +197,8 @@ function getFirstDayTimestamp(obj) {
   
 
 // 拉取主要函数
-export const fetchPost = async function (parameters, rangeConfig) {
+export const fetchPost = async function (parameters, callback) {
+    _callback = callback
 
     console.log(parameters)
     generateHTML()
@@ -206,27 +210,31 @@ export const fetchPost = async function (parameters, rangeConfig) {
         page,
         feature:4,
     }
-    if(rangeType == 1){        
+    // if(rangeType == 1){        
         requestParam = {
             ...requestParam,
             starttime: getFirstDayTimestamp(range.start),
             endtime: getLastDayTimestamp(range.end)
         }
-    }
+    // }
 
     console.log(requestParam)
-
+        return
     
-    while (loadMore) {      
+    while (page < 10 && loadMore) {
         
         requestParam.page = page
         
-        let respData = await doFetch(requestParam)       
+        let respData = await doFetch(requestParam)
         
         console.log(respData)
 
         if(respData?.list?.length > 0){
             total = respData.total
+            _callback({
+                type:'total',
+                value: total
+            })
         }
         else{
             loadMore = false
