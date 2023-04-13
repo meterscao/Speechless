@@ -129,6 +129,10 @@ const doFetch = async function (parameters) {
     try {
         let resp = fetchResp.data.data
         let list = resp.list
+        _callback({
+            type:'total',
+            value: resp.total
+        })
         await formatPosts(list, parameters.uid)
         return resp
     }
@@ -223,7 +227,7 @@ export const fetchPost = async function (parameters, callback) {
     console.log(requestParam)
         
     
-    while (page < 2 && loadMore) {
+    while (page < 8 && loadMore) {
         
         requestParam.page = page
         
@@ -232,11 +236,7 @@ export const fetchPost = async function (parameters, callback) {
         console.log(respData)
 
         if(respData?.list?.length > 0){
-            total = respData.total
-            _callback({
-                type:'total',
-                value: total
-            })
+            total = respData.total            
         }
         else{
             loadMore = false

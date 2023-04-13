@@ -9,8 +9,20 @@
                 <div v-if="isReady">
                     <!-- 默认的面板 -->
                     <template v-if="state == 'DEFAULT'">
-                        <div class="flex items-center"><span class="text-[40px]">🤐</span><span
-                                class="text-2xl ml-2">Speechless</span><span
+                        <div class="flex items-start py-5">
+                            <div class="font-sans italic font-bold inline-flex text-[60px]">
+                                <span class="-mr-[12px] text-red-600/50">S</span>
+                                <span class="-mr-[12px] text-orange-600/50">P</span>
+                                <span class="-mr-[12px] text-yellow-600/50">E</span>
+                                <span class="-mr-[12px] text-lime-600/50">E</span>
+                                <span class="-mr-[12px] text-green-600/50">C</span>
+                                <span class="-mr-[12px] text-teal-600/50">H</span>
+                                <span class="-mr-[12px] text-sky-600/50">L</span>
+                                <span class="-mr-[12px] text-indigo-600/50">E</span>
+                                <span class="-mr-[12px] text-purple-600/50">S</span>
+                                <span class=" text-pink-600/50">S</span>
+                            </div>
+                            <span
                                 class="ml-1 text-xs text-zinc-700 bg-zinc-100 rounded border-zinc-300 border px-1 py">V2.0</span>
                         </div>
                         <div class="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between">
@@ -45,7 +57,8 @@
                     <!-- 拉取数据ing -->
                     <template v-if="state == 'PENDING'">
                         <div class="text-sm font-medium"><label
-                                    class="underline decoration-orange-400 decoration-4 font-medium mr-2">@{{ username }}</label>{{ pendingWording }}</div>
+                                class="underline decoration-orange-400 decoration-4 font-medium mr-2">@{{ username
+                                }}</label>{{ pendingWording }}</div>
                         <div class="border-t border-gray-200 mt-4 pt-4">
                             <div class="flex justify-between">
                                 <span class="text-sm">拼命回忆中...</span>
@@ -60,7 +73,8 @@
                     <!-- 拉取完毕 -->
                     <template v-if="state == 'SAVING'">
                         <div class="text-sm font-medium"><label
-                                    class="underline decoration-orange-400 decoration-4 font-medium mr-2">@{{ username }}</label>{{ pendingWording }}</div>
+                                class="underline decoration-orange-400 decoration-4 font-medium mr-2">@{{ username
+                                }}</label>{{ pendingWording }}</div>
                         <div class="border-t border-gray-200 mt-4 pt-4">
                             <SelectNative title="图片显示方式" v-model="weiboImageScaleType" :options="OptionsWeiboImageScale" />
                         </div>
@@ -78,16 +92,17 @@
 
                     <!-- 拉取完毕 -->
                     <template v-if="state == 'DONE'">
-                        
+
                         <div class="pt-4 pb-2 flex items-center px-2">
-                            <img class="rounded-full block  p-2 overflow-hidden ring-4 ring-orange-300 w-32 h-32 flex-none" :src="donateImageURL" /> 
+                            <img class="rounded-full block  p-2 overflow-hidden ring-4 ring-orange-300 w-32 h-32 flex-none"
+                                :src="donateImageURL" />
                             <div class="text-slate-600 pl-4">
                                 <div class=" text-xl  text-slate-800 font-medium mb-2">有帮到你吗？</div>
                                 <div class="">请我喝杯奶茶吧 :-)</div>
                                 <div class=""><label
-                                    class="underline decoration-rose-400 decoration-4 mr-1">蜜雪冰城</label>？<label
-                                    class="underline decoration-blue-400 decoration-4 mr-1">瑞幸</label>？<br/>还是...<label
-                                    class="underline decoration-zinc-400 decoration-4 mr-1">喜茶</label>？</div>
+                                        class="underline decoration-rose-400 decoration-4 mr-1">蜜雪冰城</label>？<label
+                                        class="underline decoration-blue-400 decoration-4 mr-1">瑞幸</label>？<br />还是...<label
+                                        class="underline decoration-zinc-400 decoration-4 mr-1">喜茶</label>？</div>
                             </div>
                         </div>
                         <div class="border-t border-gray-200 mt-4 pt-2 text-center">
@@ -285,5 +300,4 @@ export default {
 <style>
 body {
     background: #fff !important;
-}
-</style>
+}</style>
