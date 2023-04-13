@@ -8,8 +8,7 @@ let total = 0
 let count = 0
 let loadMore = true
 let speechlessListEL
-let starttime
-let endtime
+
 let _callback
 
 // 拉取间隔时间
