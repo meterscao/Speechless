@@ -3,11 +3,11 @@
         <div class="mb-1 text-xs">{{ title }}</div>
         <div class="flex gap-1">
             <select v-model="selectedYear" @change="updateValue"
-                class="block basis-7/12 w-full pl-2 pr-6 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                class="block basis-7/12 w-full pl-2 pr-6 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md cursor-pointer">
                 <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
             </select>
             <select v-model="selectedMonth" @change="updateValue"
-                class="block basis-5/12 w-full pl-2 pr-6 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                class="block basis-5/12 w-full pl-2 pr-6 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md cursor-pointer">
                 <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
             </select>
         </div>

@@ -101,7 +101,6 @@
 
 <script>
 import SelectNative from './component/SelectNative.vue'
-import RadioList from './component/RadioList.vue'
 import SelectTimeRangeVue from "./component/SelectTimeRange.vue"
 
 import { fetchUserInfo } from './module/userInfo'
@@ -135,8 +134,7 @@ export default {
     },
     components: {
         SelectTimeRangeVue,
-        SelectNative,
-        RadioList
+        SelectNative        
     },
     
     data() {
