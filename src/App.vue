@@ -238,17 +238,9 @@ export default {
             this.state = 'SAVING'
 
         },
-        eventRangeChanged(e) {
-            this.weiboRangeisValid = e.is_valid
-            if (!e.is_valid) return
-
+        eventRangeChanged(e) {            
             this.weiboRange = e.range
-
-            this.start = e.range.start
-            this.end = e.range.end
-
-            console.log(this.weiboRange.start)
-            console.log(this.weiboRange.end)
+            console.log(this.weiboRange)
         },
         eventSavePDF() {
             setTimeout(() => {

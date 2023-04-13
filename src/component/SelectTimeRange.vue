@@ -60,6 +60,7 @@ export default {
             if(!this.checkIfValid()){
                 this.end = this.start
             }
+            this.eventChanged()
             console.log('start change')
         },
         eventEndChanged(){
@@ -67,6 +68,7 @@ export default {
 
                 this.start = this.end
             }
+            this.eventChanged()
             console.log('end change')
         }
     }

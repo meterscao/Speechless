@@ -1,17 +1,15 @@
 import axios from "axios"
 import { fetchLongText } from './longText'
 
-const GetPostsApiURL = `https://weibo.com/ajax/statuses/mymblog`
-
-const GetPostsByRangeApiURL = `https://weibo.com/ajax/statuses/searchProfile?uid=2692903952&page=1&feature=4&starttime=1680451200&endtime=1680710400`
+const GetPostsByRangeApiURL = `https://weibo.com/ajax/statuses/searchProfile`
 
 let page = 1
-let since_id = ''
 let total = 0
 let count = 0
 let loadMore = true
-let forcePause = false
 let speechlessListEL
+let starttime 
+let endtime
 
 // 拉取间隔时间
 let interval = 1000
@@ -59,12 +57,6 @@ const getDate = function (dateString, showSecond) {
     }
     return year + '/' + fillWithZero(month) + '/' + fillWithZero(day) + ' ' + fillWithZero(hour) + ':' + fillWithZero(minute) + (showSecond ? (':' + fillWithZero(second)) : '')
 
-}
-
-// 切换顶部的emoji
-const switchEmoji = function (state) {
-    if (!state) state = 'default'
-    $('.speechless-logo').text(emojiMap.get(state))
 }
 
 // 过滤多余的换行
@@ -126,7 +118,7 @@ const appendPostToBody = function (post) {
 // 拉取数据，并且格式化
 const doFetch = async function (parameters) {
     if (!parameters) parameters = {}
-    const fetchResp = await axios.get(GetPostsApiURL, {
+    const fetchResp = await axios.get(GetPostsByRangeApiURL, {
         params: parameters
     })
 
@@ -183,70 +175,63 @@ const getMonthParameters = function (ymstr) {
 
 }
 
+function getLastDayTimestamp(obj) {
+    let {year, month} = obj
+    const nextMonth = month + 1;
+    const nextMonthFirstDay = new Date(year, nextMonth - 1, 1);
+    nextMonthFirstDay.setHours(0, 0, 0, 0);
+    const lastDayTimestamp = nextMonthFirstDay.getTime() - 1;
+    return Math.floor(lastDayTimestamp/1000);
+  }
+
+function getFirstDayTimestamp(obj) {
+    let {year, month} = obj
+    const firstDay = new Date(year, month - 1, 1);
+    firstDay.setHours(0, 0, 0, 0);
+    const firstDayTimestamp = firstDay.getTime();
+    return Math.floor(firstDayTimestamp/1000)
+  }
+  
+
 // 拉取主要函数
 export const fetchPost = async function (parameters, rangeConfig) {
 
     console.log(parameters)
-    return
-
     generateHTML()
 
-    let { uid, feature } = parameters
-    let { isByRange, yearMap, range } = rangeConfig
-
-    console.log('yearMap', yearMap)
-    console.log('range', range)
-
-    let rangeMonths = getRangeMonths(yearMap, range)
-    let rangeIndex = 0
-    let rangeParams = {}
-
-    // 0|全部 1|原创
-    let sourceType = parameters.feature || 0
+    let { uid, sourceType, rangeType, range} = parameters
 
     let requestParam = {
         uid,
-        feature,
+        page,
+        feature:4,
+    }
+    if(rangeType == 1){        
+        requestParam = {
+            ...requestParam,
+            starttime: getFirstDayTimestamp(range.start),
+            endtime: getLastDayTimestamp(range.end)
+        }
     }
 
-    while (loadMore) {
-        if (isByRange) {
-            if (!rangeMonths[rangeIndex]) break
-            rangeParams = getMonthParameters(rangeMonths[rangeIndex])
+    console.log(requestParam)
+
+    
+    while (loadMore) {      
+        
+        requestParam.page = page
+        
+        let respData = await doFetch(requestParam)       
+        
+        console.log(respData)
+
+        if(respData?.list?.length > 0){
+            total = respData.total
         }
-        let respData = await doFetch({
-            ...requestParam,
-            ...rangeParams,
-            since_id,
-            page
-        })
-
-        page++
-
-        if (respData) {
-
-            if (respData.total > 0) {
-                since_id = respData.since_id
-                total = respData.total
-                loadMore = !!respData.since_id
-            }
-
-            else if (respData.total == -1) {
-
-            }
-
-            else if (!respData.total) {
-                // 如果是按照月份，需要拉下一个月份
-                if (isByRange) {
-                    rangeIndex++
-                    page = 1
-
-                }
-                else {
-                    loadMore = false
-                }
-            }
-        }
+        else{
+            loadMore = false
+        }        
+        page ++
 
     }
 }
