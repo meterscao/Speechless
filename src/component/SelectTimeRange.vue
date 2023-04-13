@@ -1,7 +1,7 @@
 <template>
     <div class="flex gap-2">
-        <SelectMonthVue @onRangeChanged="evnetStartChanged" :years="yearsArr" class="flex-1" title="开始时间" />
-        <SelectMonthVue @onRangeChanged="evnetEndChanged" :years="yearsArr" class="flex-1" title="结束时间" />
+        <SelectMonthVue v-model="start" @change="eventStartChanged" class="flex-1" title="开始时间" />
+        <SelectMonthVue v-model="end" @change="eventEndChanged" class="flex-1" title="结束时间" />
     </div>
 </template>
 
@@ -12,26 +12,29 @@ export default {
         SelectMonthVue
     },
     props: {
+        range: Object,
         years: Array
     },
     data() {
         let yearsArr = []
         if (!this.years) {
-            yearsArr = [2010, 2011, 2012]
+            yearsArr = [2020, 2021, 2022, 2023]
         }
         else {
             yearsArr = this.years
         }
         return {
-            yearsArr,
             start: {
-                year: yearsArr[0],
-                month: 1
+                year: this.range.start.year, 
+                month: this.range.start.month,
+                years: yearsArr
             },
-            end: {
-                year: yearsArr[0],
-                month: 1
-            }
+            end: { 
+                year: this.range.end.year, 
+                month: this.range.end.month, 
+                years: yearsArr 
+            },
+            yearsArr
         }
     },
     methods: {
@@ -40,26 +43,31 @@ export default {
         },
         checkIfValid() {
             let s_m = parseInt('' + this.start.year + this.fillWithZero(this.start.month))
-            let e_m = parseInt('' + this.end.year + this.fillWithZero(this.end.month))
+            let e_m = parseInt('' + this.end.year + this.fillWithZero(this.end.month))            
             return s_m <= e_m
         },
-        evnetStartChanged(e) {
-            this.start = e
-            this.eventChanged()
-        },
-        evnetEndChanged(e) {
-            this.end = e
-            this.eventChanged()
-        },
+        
         eventChanged() {
             this.$emit('onRangeChanged', {
-                is_valid: this.checkIfValid(),
                 range: {
                     start: this.start,
                     end: this.end
                 }
 
             })
+        },
+        eventStartChanged(){
+            if(!this.checkIfValid()){
+                this.end = this.start
+            }
+            console.log('start change')
+        },
+        eventEndChanged(){
+            if(!this.checkIfValid()){
+
+                this.start = this.end
+            }
+            console.log('end change')
         }
     }
 }

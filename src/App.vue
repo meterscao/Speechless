@@ -30,7 +30,7 @@
                             <SelectNative title="时间范围" v-model="weiboRangeType" :options="OptionsWeiboTimeRange" />
                         </div>
                         <div v-if="weiboRangeType == 1" class="mt-2">
-                            <SelectTimeRangeVue :years="years" @onRangeChanged="eventRangeChanged" />
+                            <SelectTimeRangeVue :range="weiboRange" :years="years" @onRangeChanged="eventRangeChanged" />
                             <div v-if="!weiboRangeisValid" class="text-sm text-red-400 pt-1">结束时间须晚于开始时间</div>
                         </div>
                         <div class="border-t border-gray-200 mt-4 pt-4">
@@ -67,9 +67,7 @@
                         <div>
                             <SelectNative title="图片显示方式" v-model="weiboImageScaleType" :options="OptionsWeiboImageScale" />
                         </div>
-                        <div class="border-t border-gray-200 mt-4 pt-4">
-                            <Switch title="显示转赞评数" :checked="false" />
-                        </div>
+                        
                         <div class="border-t border-gray-200 mt-4 pt-4">
                             <div class="flex gap-3">
                                 <button type="button"
@@ -104,7 +102,6 @@
 <script>
 import SelectNative from './component/SelectNative.vue'
 import RadioList from './component/RadioList.vue'
-import Switch from './component/Switch.vue'
 import SelectTimeRangeVue from "./component/SelectTimeRange.vue"
 
 import { fetchUserInfo } from './module/userInfo'
@@ -129,7 +126,8 @@ export default {
             this.username = user.username || ''
             let yearMap = user.history || {}
             this.yearMap = yearMap
-            this.years = Object.keys(yearMap)
+            this.years = Object.keys(user.history)
+            this.setWeiboRange()
         }
         else {
             this.isReady = false
@@ -138,9 +136,9 @@ export default {
     components: {
         SelectTimeRangeVue,
         SelectNative,
-        RadioList,
-        Switch
+        RadioList
     },
+    
     data() {
         return {
 
@@ -164,8 +162,10 @@ export default {
             weiboSourceType: 1,
             weiboRangeType: 0,
             weiboRange:null,
+
             weiboImageScaleType: 0,            
             weiboRangeisValid: true,
+
             start:null,
             end:null,
 
@@ -181,6 +181,33 @@ export default {
     methods: {
         eventStart() {
             this.state = 'SELECTRANGE'
+        },
+
+        setWeiboRange(){
+
+            console.log(this.yearMap)
+            let yearsLen = this.years.length || 0
+            let startY = this.years[0]
+            let startM = this.yearMap[this.years[0]][0]
+
+            let lastYear = this.years[yearsLen - 1]
+            let lastYearMonths = this.yearMap[lastYear]
+            let endY = lastYear
+            let endM = lastYearMonths[lastYearMonths.length - 1]
+            
+            console.log(startY,startM)
+            console.log(endY,endM)
+
+            this.weiboRange = {
+                start:{
+                    year: startY,
+                    month :startM
+                },
+                end: {
+                    year: endY,
+                    month: endM
+                }
+            }
         },
 
         async eventFetchPosts() {
@@ -205,10 +232,9 @@ export default {
 
             let posts = await fetchPost({
                 uid: this.uid,
-                sourceType: this.weiboSourceType, // ALL ORIGINAL
-                rangeType: this.weiboRangeType, // ALL RANGE            
-                starttime: this.start,
-                endtime: this.end
+                sourceType: this.weiboSourceType, // 
+                rangeType: this.weiboRangeType, // 
+                range:this.weiboRange
             })
             
             this.state = 'SAVING'
