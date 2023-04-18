@@ -51,9 +51,6 @@ div[i-am-music-player] {
     justify-content: space-between;
 }
 
-.speechless-post .region {
-
-}
 
 .speechless-post .main {
     flex: 1;
@@ -67,15 +64,25 @@ div[i-am-music-player] {
     margin-bottom: 5px;
 }
 
-.speechless-post .media {
+.speechless-post .media .image{
+    display: block;
+    margin-bottom: 15px;
+    max-width: 100%;
+}
+.speechless-post .media .image:last-child{
+    margin-bottom: 0;
+}
+
+.speech-less-thumbnail .speechless-post .media {
     padding-top: 5px;
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
 }
 
-.speechless-post .media .image {    
-    height: 200px;        
+.speech-less-thumbnail .speechless-post .media .image {    
+    height: 200px;
+    margin-bottom: 0;
 }
 
 .speechless-list.showinteraction .interactionStats {

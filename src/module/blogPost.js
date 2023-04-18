@@ -38,7 +38,7 @@ const updateWholePageState = function () {
 const generateHTML = function () {
     document.getElementById('app').remove()
     speechlessListEL = document.createElement('div')
-    speechlessListEL.classList = "speechless-list"
+    speechlessListEL.classList = "speechless-list speech-less-thumbnail"    
     document.body.append(speechlessListEL)
 }
 
@@ -96,7 +96,7 @@ const appendPostToBody = function (post) {
     if (post.pic_infos) {
         mediaHTML += '<div class="media">'
         for (let key in post.pic_infos) {
-            mediaHTML += `<img class="image" src="${post.pic_infos[key].bmiddle.url}" />`
+            mediaHTML += `<img class="image" src="${post.pic_infos[key].large.url}" />`
         }
         mediaHTML += '</div>'
     }
@@ -238,7 +238,7 @@ export const fetchPost = async function (parameters, callback) {
     console.log(requestParam)
 
 
-    while (page < 8 && loadMore) {
+    while (page < 2 && loadMore) {
 
         requestParam.page = page
 
