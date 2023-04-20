@@ -1,105 +1,102 @@
 /* Reset */
-body {    
-    height: auto!important;         
-    font-size: 14px!important;
-    line-height: 24px!important;
+body {
+  height: auto !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
 }
 #WB_webchat {
-    display: none !important;
+  display: none !important;
 }
 
 .icon_setskin {
-    display: none !important;
+  display: none !important;
 }
 
 div[i-am-music-player] {
-    display: none !important
+  display: none !important;
 }
 
 /* Post Styles */
-.speechless-list{
-    padding:20px;
-    color: #000!important;
-    background: #fff !important;
+.speechless-list {
+  padding: 20px;
+  color: #000 !important;
+  background: #fff !important;
 }
 
 .speechless-post {
-    font-size:14px;
-    line-height: 24px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    overflow: hidden;
-    display: flex;    
-    width: 100%;
+  font-size: 14px;
+  line-height: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
 }
 
 .speechless-post .text img,
 .speechless-post .retweet img {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: -3px;
-    margin: 0 2px;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+  margin: 0 2px;
 }
 
 .speechless-post .meta {
-    width: 150px;    
-    color: #666;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  width: 150px;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-
 .speechless-post .main {
-    flex: 1;
-    width: 1px;
+  flex: 1;
+  width: 1px;
 }
 
 .speechless-post .retweet {
-    background: #f1f1f1;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+  background: #f1f1f1;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-.speechless-post .media .image{
-    display: block;
-    margin-bottom: 15px;
-    max-width: 100%;
-}
-.speechless-post .media .image:last-child{
-    margin-bottom: 0;
+.speechless-post .media .image {
+  display: block;
+  margin-top: 10px;
+  max-width: 600px;
 }
 
 .speech-less-thumbnail .speechless-post .media {
-    padding-top: 5px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
+  padding-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
-.speech-less-thumbnail .speechless-post .media .image {    
-    height: 200px;
-    margin-bottom: 0;
+.speech-less-thumbnail .speechless-post .media .image {
+  height: 200px;
+  margin-top: 0;
 }
 
 .speechless-list.showinteraction .interactionStats {
-    display: flex;
-    gap:5px;
-    color: #999;
+  display: flex;
+  gap: 5px;
+  color: #999;
 }
 
 /* Print */
 @media print {
-    html,body{
-        background: #fff !important;
-    }
-    .speechless-post .media {
-        page-break-inside: avoid;
-    }
-    #speechless{
-        display: none;
-    }
+  html,
+  body {
+    background: #fff !important;
+  }
+  .speechless-post .media {
+    page-break-inside: avoid;
+  }
+  #speechless {
+    display: none;
+  }
 }

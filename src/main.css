@@ -2,7 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    font-size:14px;
-    line-height: 1.5;
+body {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#app svg,
+#app img {
+  display: inline-block;
 }

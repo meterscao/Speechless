@@ -7,6 +7,8 @@ let page = 1
 let total = 0
 let count = 0
 let loadMore = true
+let _uid
+let _sourceType = 1
 let speechlessListEL
 
 let _callback
@@ -79,46 +81,48 @@ const clearLineBreak = function (text) {
 
 // 把卡片添加到页面中
 const appendPostToBody = function (post) {
-  let metaHTML = ""
+  if (_sourceType == 1 && (post.retweeted_status || post.user.id != _uid)) {
+  } else {
+    let metaHTML = ""
 
-  metaHTML += `<div class="meta">
+    metaHTML += `<div class="meta">
                 <div class="meta-info">
                     <span class="date">${getDate(post.created_at)}</span>`
-  if (post.region_name) {
-    metaHTML += `<div class="region">${post.region_name.replace(
-      "发布于 ",
-      ""
-    )}</div>`
-  }
-  metaHTML += `</div></div>`
-
-  let textHTML = `<div class="text">${clearLineBreak(
-    post.long_text || post.text
-  )}</div>`
-
-  let retweetHTML = ""
-  if (post.retweeted_status && post.retweeted_status.user) {
-    retweetHTML += `<div class="retweet">`
-    retweetHTML += `${
-      post.retweeted_status.user.screen_name
-        ? post.retweeted_status.user.screen_name
-        : ""
-    }<span style="margin:0 3px;">:</span>${clearLineBreak(
-      post.retweeted_status.long_text || post.retweeted_status.text
-    )}`
-    retweetHTML += `</div>`
-  }
-
-  let mediaHTML = ""
-  if (post.pic_infos) {
-    mediaHTML += '<div class="media">'
-    for (let key in post.pic_infos) {
-      mediaHTML += `<img class="image" src="${post.pic_infos[key].large.url}" />`
+    if (post.region_name) {
+      metaHTML += `<div class="region">${post.region_name.replace(
+        "发布于 ",
+        ""
+      )}</div>`
     }
-    mediaHTML += "</div>"
-  }
+    metaHTML += `</div></div>`
 
-  let postHTML = `
+    let textHTML = `<div class="text">${clearLineBreak(
+      post.long_text_source || post.text || post.page_info?.page_title
+    )}</div>`
+
+    let retweetHTML = ""
+    if (post.retweeted_status && post.retweeted_status.user) {
+      retweetHTML += `<div class="retweet">`
+      retweetHTML += `${
+        post.retweeted_status.user.screen_name
+          ? post.retweeted_status.user.screen_name
+          : ""
+      }<span style="margin:0 3px;">:</span>${clearLineBreak(
+        post.retweeted_status.long_text_source || post.retweeted_status.text
+      )}`
+      retweetHTML += `</div>`
+    }
+
+    let mediaHTML = ""
+    if (post.pic_infos) {
+      mediaHTML += '<div class="media">'
+      for (let key in post.pic_infos) {
+        mediaHTML += `<img class="image" src="${post.pic_infos[key].large.url}" />`
+      }
+      mediaHTML += "</div>"
+    }
+
+    let postHTML = `
         ${metaHTML}
         <div class="main">
         ${textHTML}
@@ -126,11 +130,13 @@ const appendPostToBody = function (post) {
         ${mediaHTML}            
         </div>`
 
-  let node = document.createElement("div")
-  node.className = "speechless-post"
-  node.innerHTML = postHTML
+    let node = document.createElement("div")
+    node.className = "speechless-post"
+    node.innerHTML = postHTML
 
-  speechlessListEL.appendChild(node)
+    speechlessListEL.appendChild(node)
+  }
+
   updateWholePageState()
 }
 
@@ -174,7 +180,8 @@ const formatPosts = async function (posts, uid) {
     if (!!post.isLongText) {
       try {
         let longtextData = await fetchLongText(post.mblogid)
-        post.long_text = longtextData.longTextContent || ""
+        post.long_text_source = longtextData.longTextContent || ""
+        console.log(post)
       } catch (err) {
         console.error(err)
       }
@@ -182,7 +189,8 @@ const formatPosts = async function (posts, uid) {
     if (post.retweeted_status && post.retweeted_status.isLongText) {
       try {
         let longtextData = await fetchLongText(post.retweeted_status.mblogid)
-        post.retweeted_status.long_text = longtextData.longTextContent || ""
+        post.retweeted_status.long_text_source =
+          longtextData.longTextContent || ""
       } catch (err) {
         console.error(err)
       }
@@ -220,7 +228,7 @@ const fetchLongText = async function (postid) {
   })
 
   try {
-    return longTextResp.data
+    return longTextResp?.data?.data || ""
   } catch (error) {
     return
   }
@@ -234,6 +242,9 @@ export const fetchPost = async function (parameters, callback) {
   generateHTML()
 
   let { uid, sourceType, rangeType, range } = parameters
+
+  _uid = uid
+  _sourceType = sourceType
 
   let requestParam = {
     uid,

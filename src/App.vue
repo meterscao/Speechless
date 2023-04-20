@@ -66,14 +66,14 @@
                 结束时间须晚于开始时间
               </div>
             </div>
-            <div class="border-t border-gray-200 mt-4 pt-4">
+            <div class="mt-4">
               <SelectNative
                 title="内容类型"
                 v-model="weiboSourceType"
                 :options="OptionsWeiboSourceType"
               />
             </div>
-            <div class="border-t border-gray-200 mt-4 pt-4">
+            <div class="mt-4">
               <button
                 type="button"
                 @click="eventFetchPosts"
@@ -116,7 +116,7 @@
             </div>
             <div class="border-t border-gray-200 mt-4 pt-4">
               <SelectNative
-                title="图片显示方式"
+                title="图片尺寸"
                 v-model="weiboImageScaleType"
                 :options="OptionsWeiboImageScale"
               />
@@ -194,7 +194,7 @@ import SelectTimeRangeVue from "./component/SelectTimeRange.vue"
 import { fetchUserInfo } from "./module/userInfo"
 import { fetchPost } from "./module/blogPost"
 
-const OptionsWeiboTimeRange = ["全部时间", "指定时间范围"]
+const OptionsWeiboTimeRange = ["全部时间", "指定时间"]
 const OptionsWeiboSourceType = ["全部微博", "原创微博"]
 const OptionsWeiboImageScale = ["缩略图", "大图"]
 
@@ -307,10 +307,10 @@ export default {
         documentTitle += `_${this.weiboRange.start.year}${this.weiboRange.start.month}-${this.weiboRange.end.year}${this.weiboRange.end.month}`
       }
       if (this.weiboSourceType == 1) {
-        this.pendingWording += ` 的原创微博`
+        this.pendingWording += `的原创微博`
         documentTitle += `_原创微博`
       } else {
-        this.pendingWording += ` 的全部微博`
+        this.pendingWording += `的全部微博`
         documentTitle += `_全部微博`
       }
 
