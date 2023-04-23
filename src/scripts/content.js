@@ -209,8 +209,8 @@
 
 
     // 初始化面板
-    const initThePanel = function (uid) {
-
+    const initThePanel = async function (uid) {
+        await injectCSS()
 
         if (!$speechlessPanel) {
             body.append(`<div class="speechless">
@@ -293,6 +293,14 @@
         else {
             $speechlessMain.append(`😵‍💫 请进入个人主页，刷新页面后使用`)
         }
+    }
+
+    // 注入CSS到HTML以便另存为MHTML
+    const injectCSS = async function () {
+        const css = await (await fetch(chrome.runtime.getURL("style/speechless.css"))).text()
+        const styleElement = document.createElement("style")
+        styleElement.innerText = css
+        document.head.appendChild(styleElement)
     }
 
     // 开始拉取时，面板的状态
@@ -411,9 +419,9 @@
 
     }
 
-    const init = function () {
+    const init = async function () {
         getInfo()
-        initThePanel(uid)
+        await initThePanel(uid)
 
 
     }

@@ -9,15 +9,17 @@
         "48": "icons/Speechless48.png",
         "128": "icons/Speechless128.png"
     },
-    
+    "web_accessible_resources": [{
+        "resources": [
+            "style/speechless.css"
+        ],
+        "matches": ["<all_urls>"]
+    }],
     "content_scripts": [
         {
             "js": [
                 "scripts/jquery-3.6.1.min.js",
                 "scripts/content.js"
-            ],
-            "css": [
-                "style/speechless.css"
             ],
             "matches": [
                 "https://weibo.com/u/*",
