@@ -68,22 +68,33 @@ div[i-am-music-player] {
     padding-top: 5px;
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     gap: 5px;
+    width: 475px;
 }
 
 .speechless-post .media img {
-    
     object-fit: cover;
+    width: fit-content;
     height: 150px;
+}
+.speechless-post .media img:hover {
+    width: fit-content;
+    height: fit-content;
 }
 
 .speechless-post .interactionStats {
     display: none;
 }
 
-.speechless-list.cropimage .media img{
+.speechless-list.cropimage .media img {
     width: 150px;
 }
+.speechless-list.cropimage .media img:hover {
+    width: fit-content;
+    height: fit-content;
+}
+
 .speechless-list.showinteraction .interactionStats {
     display: flex;
     gap:5px;
