@@ -21,6 +21,9 @@
     // 上一次拉取时间
     let lastFetchTimeStamp = 0
 
+    // 是否拉取原图
+    let ifFetchOriginal = true
+
     const body = $('body')
     let $progressCount
     let $progressBar
@@ -150,7 +153,7 @@
     }
 
     // 把卡片添加到页面中
-    const appendPostToBody = function (post) {
+    const appendPostToBody = function (post, imgQuality) {
 
         let metaHTML = ''
         let interactionStatsHTML = ''
@@ -187,7 +190,7 @@
         if (post.pic_infos) {
             mediaHTML += '<div class="media">'
             for (let key in post.pic_infos) {
-                mediaHTML += `<img class="image" src="${post.pic_infos[key].bmiddle.url}" />`
+                mediaHTML += `<img class="image" src="${post.pic_infos[key][imgQuality].url}" />`
             }
             mediaHTML += '</div>'
         }
@@ -227,8 +230,17 @@
         $speechlessMain.html('')
 
         if (uid) {
-            $speechlessMain.append(`<div class="speechless-action item-center content-between">
-            <span class="speechless-tips">📦 把<span class="speechless-username">@${username}</span>的记忆打包...</span><span class="speechless-button" id="doSpeechless">开始</span>
+            $speechlessMain.append(`<div class="speechless-action">
+                <div class="item-center content-between">
+                    <span class="speechless-tips">📦 把<span class="speechless-username">@${username}</span>的记忆打包...</span>
+                    <span class="speechless-button" id="doSpeechless">开始</span>
+                </div>
+                <div class="speechless-config">                    
+                    <div class="speechless-config-item">
+                        <div class="speechless-config-label"><label class="item-center"><input type="checkbox" name="ifFetchOriginal" id="ifFetchOriginal" class="speechless-config-checkbox" checked="checked" />拉取原图</label></div>
+                        <div class="speechless-config-description">勾选则拉取高画质原图，不勾选则只拉取低画质缩略图。</div>
+                    </div>
+                </div>
             </div>`)
             $speechlessMain.append(`<div class="speechless-fetching" style="display:none;">
             <div class="item-center content-between"><span class="speechless-tips">📡 正在努力回忆中...</span></div>
@@ -248,7 +260,6 @@
                         <div class="speechless-config-label"><label class="item-center"><input type="checkbox" name="ifShowInteraction" id="ifShowInteraction" class="speechless-config-checkbox" />显示转赞评</label></div>
                         <div class="speechless-config-description">显示微博的转发、点赞、评论数</div>
                     </div>
-                    
                 </div>
             </div>`)
 
@@ -278,6 +289,10 @@
                 else{
                     $speechlessList.addClass('cropimage')
                 }
+            })
+
+            $(document).on('change','#ifFetchOriginal',function(){                
+                ifFetchOriginal = this.checked
             })
 
             $(document).on('change','#ifShowInteraction',function(){
@@ -345,6 +360,8 @@
 
     // 循环遍历的逻辑
     const fetchPost = async function () {
+        const imgQuality = ifFetchOriginal ? "original" : "bmiddle";
+
         const GetPostsURL = `https://weibo.com/ajax/statuses/mymblog`
         const GetLongTextURL = `https://weibo.com/ajax/statuses/longtext`
         // fetch posts
@@ -399,7 +416,7 @@
                         }
                         catch (err) { console.error(err) }
                     }
-                    appendPostToBody(post)
+                    appendPostToBody(post, imgQuality)
                 }
 
             } catch (err) {
