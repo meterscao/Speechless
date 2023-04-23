@@ -259,9 +259,7 @@ export const fetchPost = async function (parameters, callback) {
     }
   }
 
-  console.log(requestParam)
-
-  while (page < 2 && loadMore) {
+  while (loadMore) {
     requestParam.page = page
 
     let respData = await doFetch(requestParam)
