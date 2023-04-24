@@ -1,5 +1,10 @@
 /* Reset */
+
+html {
+  background-color: #fff !important;
+}
 body {
+  background-color: #fff !important;
   height: auto !important;
   font-size: 14px !important;
   line-height: 24px !important;
@@ -85,6 +90,13 @@ div[i-am-music-player] {
   display: flex;
   gap: 5px;
   color: #999;
+}
+.speechless-corpyright {
+  text-align: center;
+}
+.speechless-corpyright a {
+  color: rgb(239, 68, 68);
+  font-weight: 500;
 }
 
 /* Print */

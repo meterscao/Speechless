@@ -43,6 +43,17 @@ const generateHTML = function () {
   document.body.append(speechlessListEL)
 }
 
+const appendSpeechless = function () {
+  let dateString = getDate(new Date())
+  let speechlessHtml = `
+   ${dateString} 使用 <a href="https://speechless.fun" target="_blank">&hearts; Speechless</a> 导出
+  `
+  let node = document.createElement("div")
+  node.className = "speechless-corpyright"
+  node.innerHTML = speechlessHtml
+  speechlessListEL.appendChild(node)
+}
+
 // 格式化时间
 const getDate = function (dateString, showSecond) {
   let date = new Date(dateString)
@@ -271,4 +282,6 @@ export const fetchPost = async function (parameters, callback) {
     }
     page++
   }
+
+  appendSpeechless()
 }

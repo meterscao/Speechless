@@ -1,10 +1,75 @@
 <template>
-  <div class="fixed z-[9999] top-[70px] right-5 w-[360px]">
+  <div
+    v-if="isMinimum"
+    @click="eventResetPopup"
+    class="fixed z-[9999] top-[70px] right-5 p-2 rounded-full bg-white shadow-xl shadow-black/5 ring-2 ring-slate-700/10 cursor-pointer"
+  >
+    <div class="font-sans italic font-bold inline-flex text-[20px] -space-x-1">
+      <span class="text-red-600/50">S</span>
+      <span class="text-orange-600/50">P</span>
+      <span class="text-yellow-600/50">E</span>
+      <span class="text-lime-600/50">E</span>
+      <span class="text-green-600/50">C</span>
+      <span class="text-teal-600/50">H</span>
+      <span class="text-sky-600/50">L</span>
+      <span class="text-indigo-600/50">E</span>
+      <span class="text-purple-600/50">S</span>
+      <span class="text-pink-600/50">S</span>
+    </div>
+  </div>
+  <div v-else class="fixed z-[9999] top-[70px] right-5 w-[360px]">
     <div
-      class="relative p-5 rounded-md bg-white text-slate-700 shadow-xl shadow-black/5 ring-1 ring-slate-700/10"
+      class="relative p-5 pt-7 rounded-md bg-white text-slate-700 shadow-xl shadow-black/5 ring-2 ring-slate-700/10"
     >
       <div v-if="isLoading" class="text-center py-5">正在初始化...</div>
       <template v-else>
+        <div
+          class="flex absolute right-0 top-0 border-l-2 border-b-2 rounded-bl-md"
+        >
+          <a
+            href="https://speechless.fun"
+            title="帮助"
+            target="_blank"
+            class="p-1"
+          >
+            <svg
+              fill="none"
+              class="w-4 h-4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+              ></path>
+            </svg>
+          </a>
+          <span
+            @click="eventMinimize"
+            class="p-1 border-l-2 cursor-pointer"
+            title="收起"
+            ><svg
+              fill="none"
+              class="w-4 h-4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M18 12H6"
+              ></path>
+            </svg>
+          </span>
+        </div>
+
         <div v-if="isReady">
           <!-- 默认的面板 -->
           <template v-if="state == 'DEFAULT'">
@@ -148,8 +213,8 @@
                 class="rounded-full block p-2 overflow-hidden ring-4 ring-orange-300 w-32 h-32 flex-none"
                 :src="donateImageURL"
               />
-              <div class="text-slate-600 pl-4">
-                <div class="text-xl text-slate-800 font-medium mb-2">
+              <div class="text-stone-600 pl-4">
+                <div class="text-xl text-stone-800 font-medium mb-2">
                   有帮到你吗？
                 </div>
                 <div class="">请我喝杯奶茶吧 :-)</div>
@@ -163,6 +228,24 @@
                     class="underline decoration-zinc-400 decoration-4 mr-1"
                     >喜茶</label
                   >？
+
+                  <label class="text-red-500 inline-flex items-center"
+                    ><span class="text-stone-600 mr-1">支持我继续</span
+                    ><span class="inline-flex items-center"
+                      ><span>用</span
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        class="inline-block w-5 h-5"
+                      >
+                        <path
+                          d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"
+                        ></path>
+                      </svg>
+                      <span>发电</span></span
+                    ></label
+                  >
                 </div>
               </div>
             </div>
@@ -177,10 +260,14 @@
         </div>
 
         <div v-else class="text-center py-5">
-          诶？好像出了点儿问题 :-( <br />请切到<span
-            class="text-orange-600 font-medium px-1"
-            >用户主页</span
-          >，再刷新下页面试试
+          请切到<span class="text-orange-600 font-medium px-1">用户主页</span
+          >，再刷新下页面试试<br />
+          去<a
+            href="https://speechless.fun"
+            class="text-orange-600 font-medium underline px-1"
+            target="_blank"
+            >speechless.fun</a
+          >查看更多帮助
         </div>
       </template>
     </div>
@@ -226,6 +313,8 @@ export default {
       //
       isLoading: true,
       isReady: false,
+      isMinimum:
+        localStorage.getItem("speechlessPopupMinimize") === "true" || false,
 
       OptionsWeiboTimeRange,
       OptionsWeiboSourceType,
@@ -346,6 +435,14 @@ export default {
     eventRangeChanged(e) {
       this.weiboRange = e.range
       console.log(this.weiboRange)
+    },
+    eventMinimize() {
+      this.isMinimum = true
+      localStorage.setItem("speechlessPopupMinimize", "true")
+    },
+    eventResetPopup() {
+      this.isMinimum = false
+      localStorage.setItem("speechlessPopupMinimize", "false")
     },
     eventSavePDF() {
       setTimeout(() => {
