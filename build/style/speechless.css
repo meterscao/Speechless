@@ -98,6 +98,9 @@ div[i-am-music-player] {
   color: rgb(239, 68, 68);
   font-weight: 500;
 }
+@page {
+  size: A3;
+}
 
 /* Print */
 @media print {
@@ -105,8 +108,14 @@ div[i-am-music-player] {
   body {
     background: #fff !important;
   }
-  .speechless-post .media {
+  .speechless-post .image {
     page-break-inside: avoid;
+  }
+  .speech-less-thumbnail .media {
+    page-break-inside: avoid;
+  }
+  .speech-less-thumbnail .image {
+    page-break-inside: auto;
   }
   #speechless {
     display: none;
