@@ -39,6 +39,8 @@ div[i-am-music-player] {
   width: 100%;
 }
 
+.speechless-post .text {
+}
 .speechless-post .text img,
 .speechless-post .retweet img {
   display: inline-block;
@@ -67,14 +69,32 @@ div[i-am-music-player] {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-
-.speechless-post .media .image {
-  display: block;
-  margin-top: 10px;
-  max-width: 600px;
+.speechless-post .media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+.speechless-post .media::after {
+  content: "";
+  flex-grow: 999999999;
 }
 
-.speech-less-thumbnail .speechless-post .media {
+.speechless-post .media .image-container {
+  position: relative;
+}
+.speechless-post .media .image-placeholder {
+  display: block;
+}
+
+.speechless-post .media .image {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  vertical-align: bottom;
+}
+
+/* .speech-less-thumbnail .speechless-post .media {
   padding-top: 5px;
   display: flex;
   flex-wrap: wrap;
@@ -84,7 +104,7 @@ div[i-am-music-player] {
 .speech-less-thumbnail .speechless-post .media .image {
   height: 200px;
   margin-top: 0;
-}
+} */
 
 .speechless-list.showinteraction .interactionStats {
   display: flex;
@@ -98,9 +118,9 @@ div[i-am-music-player] {
   color: rgb(239, 68, 68);
   font-weight: 500;
 }
-@page {
-  size: A3;
-}
+/* @page {
+  size: A4 landscape;
+} */
 
 /* Print */
 @media print {
@@ -108,11 +128,14 @@ div[i-am-music-player] {
   body {
     background: #fff !important;
   }
+
+  .speechless-post,
+  .speechless-post .image-container,
   .speechless-post .image {
     page-break-inside: avoid;
   }
-  .speech-less-thumbnail .media {
-    page-break-inside: avoid;
+  .speechless-post .media {
+    page-break-inside: auto;
   }
   .speech-less-thumbnail .image {
     page-break-inside: auto;

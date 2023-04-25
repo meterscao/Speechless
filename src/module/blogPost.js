@@ -128,7 +128,18 @@ const appendPostToBody = function (post) {
     if (post.pic_infos) {
       mediaHTML += '<div class="media">'
       for (let key in post.pic_infos) {
-        mediaHTML += `<img class="image" src="${post.pic_infos[key].large.url}" />`
+        mediaHTML += `<div class="image-container" style="width:${
+          (post.pic_infos[key].large.width * 400) /
+          post.pic_infos[key].large.height
+        }px;flex-grow:${
+          (post.pic_infos[key].large.width * 400) /
+          post.pic_infos[key].large.height
+        }"><i class="image-placeholder" style="padding-bottom:${
+          (post.pic_infos[key].large.height / post.pic_infos[key].large.width) *
+          100
+        }%"></i><img class="image" src="${
+          post.pic_infos[key].large.url
+        }" /></div>`
       }
       mediaHTML += "</div>"
     }
