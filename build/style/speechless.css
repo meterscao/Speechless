@@ -1,0 +1,154 @@
+/* Reset */
+
+html {
+  background-color: #fff !important;
+}
+body {
+  background-color: #fff !important;
+  height: auto !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
+}
+#WB_webchat {
+  display: none !important;
+}
+
+.icon_setskin {
+  display: none !important;
+}
+
+div[i-am-music-player] {
+  display: none !important;
+}
+
+/* Post Styles */
+.speechless-list {
+  padding: 20px;
+  color: #000 !important;
+  background: #fff !important;
+}
+
+.speechless-post {
+  font-size: 14px;
+  line-height: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+}
+
+.speechless-post .text {
+}
+.speechless-post .text img,
+.speechless-post .retweet img {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+  margin: 0 2px;
+}
+
+.speechless-post .meta {
+  width: 150px;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.speechless-post .main {
+  flex: 1;
+  width: 1px;
+}
+
+.speechless-post .retweet {
+  background: #f1f1f1;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.speechless-post .media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+.speechless-post .media::after {
+  content: "";
+  flex-grow: 999999999;
+}
+
+.speechless-post .media .image-container {
+  position: relative;
+}
+.speechless-post .media .image-placeholder {
+  display: block;
+}
+
+.speechless-post .media .image {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  vertical-align: bottom;
+}
+.speechless-list-small .media-medium,
+.speechless-list-small .media-large {
+  display: none;
+}
+.speechless-list-small .media-small {
+  display: flex;
+}
+
+.speechless-list-medium .media-small,
+.speechless-list-medium .media-large {
+  display: none;
+}
+.speechless-list-medium .media-medium {
+  display: flex;
+}
+
+.speechless-list-large .media-small,
+.speechless-list-large .media-medium {
+  display: none;
+}
+.speechless-list-large .media-large {
+  display: flex;
+}
+
+.speechless-list.showinteraction .interactionStats {
+  display: flex;
+  gap: 5px;
+  color: #999;
+}
+.speechless-corpyright {
+  text-align: center;
+}
+.speechless-corpyright a {
+  color: rgb(239, 68, 68);
+  font-weight: 500;
+}
+
+/* Print */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  .speechless-post,
+  .speechless-post .image-container,
+  .speechless-post .image {
+    page-break-inside: avoid;
+  }
+  .speechless-post .media {
+    page-break-inside: auto;
+  }
+  .speech-less-thumbnail .image {
+    page-break-inside: auto;
+  }
+  #speechless {
+    display: none;
+  }
+}
