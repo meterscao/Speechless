@@ -1,9 +1,10 @@
 # Speechless
 
-![image](https://user-images.githubusercontent.com/1685497/202353941-811d2c6c-c10c-45ab-94ed-8811bebc7c34.png)
-
+![WechatIMG160 copy](https://user-images.githubusercontent.com/1685497/234859432-04ab3f05-82ae-4a2f-9b51-265c4998b38d.jpg)
 
 Speechless 是一个帮助新浪微博用户，把微博内容导出成 PDF 进行本地备份的 Chrome Extension。
+
+查看官网👉 [https://sppechless.fun](https://speechless.fun)
 
 ## 使用
 
@@ -11,18 +12,36 @@ Speechless 是一个帮助新浪微博用户，把微博内容导出成 PDF 进�
 
   [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/igilfpckopigflpafgoajlljpdhmoall?color=green&label=Chrome%20Web%20Store&logo=google%20chrome&logoColor=white)](https://chrome.google.com/webstore/detail/speechless-%E5%BE%AE%E5%8D%9A%E5%A4%87%E4%BB%BD/igilfpckopigflpafgoajlljpdhmoall)
 
-- 下载插件包本地载入
-
-  [![GitHub release (latest by date)](https://img.shields.io/github/v/release/meterscao/speechless?color=green&label=Latest%20release&logo=github)](https://github.com/meterscao/Speechless/releases)
-
 
 ## 简介
-![ScreenShots](https://user-images.githubusercontent.com/1685497/202354135-41665c56-c77d-4ef7-8a10-fdcbc42be822.png)
-![ScreenShots-1](https://user-images.githubusercontent.com/1685497/202354146-3286ac55-0c54-4f3f-9776-1b8e372ea547.png)
-![ScreenShots-2](https://user-images.githubusercontent.com/1685497/202354154-204ac341-41e4-47ee-b11c-39c7a382ab53.png)
-![ScreenShots-3](https://user-images.githubusercontent.com/1685497/202354162-cc241783-b631-4bbd-846b-ee8dc851ae76.png)
-![ScreenShots-4](https://user-images.githubusercontent.com/1685497/202354168-0d1bde41-3f20-42b0-a393-8a210b61f643.png)
 
+✅ 一键导出 PDF
+
+将微博的文字、图片、表情轻松备份成高质量PDF文件，方便阅读、浏览和储存。
+
+✅ 支持时间范围筛选
+
+可以根据时间范围进行筛选和导出，确保只备份你关心的特定时期的微博内容。
+
+✅ 备份任何公开的微博
+
+不仅支持备份你自己的微博，还支持其他任何公共公开的微博。
+
+✅ 安全可靠
+
+无需额外登录和输入密码，直接通过插件形式使用，确保你的账户安全和隐私保护。
+
+✅ 支持原创与转载
+
+可选择仅备份原创微博或全部微博（含转发内容），灵活满足不同需求。
+
+✅ 精美的照片排版
+
+支持选择图片备份的大小和清晰度，为你提供最佳的阅读和存储体验。
+
+![WechatIMG161 copy](https://user-images.githubusercontent.com/1685497/234859469-62b64b5a-728d-48e2-ac24-45d68266f751.jpg)
+
+![WechatIMG162 copy](https://user-images.githubusercontent.com/1685497/234859495-970397e5-1cbd-4272-868d-74ab1a6dac20.jpg)
 
 ## 原理
 
@@ -38,13 +57,21 @@ Chrome 并没有为 Extension 提供直接导出 PDF 的 Api，但是可以借�
 
 ## 依赖
 
-- [jQuery](https://github.com/jquery/jquery)
+- Vue3
+- TailwindCSS
 
 ## 其他
 
 - 愿人人都有自由表达的权利。
 
 ## 更新
+### version 2.0
+- 支持选择时间范围
+- 支持选择图片大小
+- 支持仅备份原创微博
+- 支持最小化窗口
+- 支持多种url形式的微博主页
+
 ### version 1.2 
 - 增加了默认的拉取时间间隔，以避免拉取过于频繁被微博限制的问题。但目前的方法仍不是最优解法，尚有较大优化空间
 - 增加了拉取完成后，手动选择图片裁切样式的操作
