@@ -39,7 +39,7 @@ const updateWholePageState = function () {
 const generateHTML = function () {
   document.getElementById("app").remove()
   speechlessListEL = document.createElement("div")
-  speechlessListEL.classList = "speechless-list speech-less-thumbnail"
+  speechlessListEL.classList = "speechless-list speechless-list-small"
   document.body.append(speechlessListEL)
 }
 
@@ -126,13 +126,47 @@ const appendPostToBody = function (post) {
 
     let mediaHTML = ""
     if (post.pic_infos) {
-      mediaHTML += '<div class="media">'
+      mediaHTML += '<div class="media media-small">'
       for (let key in post.pic_infos) {
         mediaHTML += `<div class="image-container" style="width:${
-          (post.pic_infos[key].large.width * 400) /
+          (post.pic_infos[key].large.width * 160) /
           post.pic_infos[key].large.height
         }px;flex-grow:${
-          (post.pic_infos[key].large.width * 400) /
+          (post.pic_infos[key].large.width * 160) /
+          post.pic_infos[key].large.height
+        }"><i class="image-placeholder" style="padding-bottom:${
+          (post.pic_infos[key].large.height / post.pic_infos[key].large.width) *
+          100
+        }%"></i><img class="image" src="${
+          post.pic_infos[key].large.url
+        }" /></div>`
+      }
+      mediaHTML += "</div>"
+
+      mediaHTML += '<div class="media media-medium">'
+      for (let key in post.pic_infos) {
+        mediaHTML += `<div class="image-container" style="width:${
+          (post.pic_infos[key].large.width * 320) /
+          post.pic_infos[key].large.height
+        }px;flex-grow:${
+          (post.pic_infos[key].large.width * 320) /
+          post.pic_infos[key].large.height
+        }"><i class="image-placeholder" style="padding-bottom:${
+          (post.pic_infos[key].large.height / post.pic_infos[key].large.width) *
+          100
+        }%"></i><img class="image" src="${
+          post.pic_infos[key].large.url
+        }" /></div>`
+      }
+      mediaHTML += "</div>"
+
+      mediaHTML += '<div class="media media-large">'
+      for (let key in post.pic_infos) {
+        mediaHTML += `<div class="image-container" style="width:${
+          (post.pic_infos[key].large.width * 500) /
+          post.pic_infos[key].large.height
+        }px;flex-grow:${
+          (post.pic_infos[key].large.width * 500) /
           post.pic_infos[key].large.height
         }"><i class="image-placeholder" style="padding-bottom:${
           (post.pic_infos[key].large.height / post.pic_infos[key].large.width) *
@@ -161,6 +195,22 @@ const appendPostToBody = function (post) {
 
   updateWholePageState()
 }
+const fetchWithRetry = async function (
+  GetPostsByRangeApiURL,
+  parameters,
+  retries = 3
+) {
+  while (retries > 0) {
+    try {
+      const response = await axios.get(GetPostsByRangeApiURL, parameters)
+      return response
+    } catch (error) {
+      console.error(`Fetch failed, ${retries - 1} retries left: `, error)
+      retries--
+    }
+  }
+  throw new Error("Maximum retries reached, request failed")
+}
 
 // 拉取数据，并且格式化
 const doFetch = async function (parameters) {
@@ -174,7 +224,7 @@ const doFetch = async function (parameters) {
   }
 
   lastFetchTimeStamp = parseInt(new Date().getTime())
-  const fetchResp = await axios.get(GetPostsByRangeApiURL, {
+  const fetchResp = await fetchWithRetry(GetPostsByRangeApiURL, {
     params: parameters,
   })
 
@@ -283,13 +333,19 @@ export const fetchPost = async function (parameters, callback) {
 
   while (loadMore) {
     requestParam.page = page
-
     let respData = await doFetch(requestParam)
-
-    if (respData?.list?.length > 0) {
-      total = respData.total
+    console.log(respData)
+    if (!respData) {
+      // 如果是接口报错了，什么都不干，继续 page ++
+      console.log("接口报错了")
     } else {
-      loadMore = false
+      if (respData?.list?.length > 0) {
+        total = respData.total
+        console.log("继续拉")
+      } else {
+        loadMore = false
+        console.log("数据拉完了")
+      }
     }
     page++
   }

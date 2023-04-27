@@ -191,12 +191,6 @@
               <div class="flex gap-3">
                 <button
                   type="button"
-                  class="hidden w-full flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                >
-                  重新开始
-                </button>
-                <button
-                  type="button"
                   @click="eventSavePDF"
                   class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                 >
@@ -213,48 +207,49 @@
                 class="rounded-full block p-2 overflow-hidden ring-4 ring-orange-300 w-32 h-32 flex-none"
                 :src="donateImageURL"
               />
-              <div class="text-stone-600 pl-4">
+              <div class="text-stone-600 pl-5">
                 <div class="text-xl text-stone-800 font-medium mb-2">
                   有帮到你吗？
                 </div>
                 <div class="">请我喝杯奶茶吧 :-)</div>
                 <div class="">
-                  <label class="underline decoration-rose-400 decoration-4 mr-1"
-                    >蜜雪冰城</label
-                  >？<label
-                    class="underline decoration-blue-400 decoration-4 mr-1"
-                    >瑞幸</label
-                  >？<br />还是...<label
-                    class="underline decoration-zinc-400 decoration-4 mr-1"
-                    >喜茶</label
-                  >？
-
-                  <label class="text-red-500 inline-flex items-center"
+                  <label class="inline-flex items-center"
                     ><span class="text-stone-600 mr-1">支持我继续</span
-                    ><span class="inline-flex items-center"
-                      ><span>用</span
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        class="inline-block w-5 h-5"
-                      >
-                        <path
-                          d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"
-                        ></path>
-                      </svg>
-                      <span>发电</span></span
+                    ><span class="text-red-500 font-medium">
+                      <span class="inline-flex items-center"
+                        ><span>用</span
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="inline-block w-5 h-5"
+                        >
+                          <path
+                            d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"
+                          ></path>
+                        </svg>
+                        <span>发电</span></span
+                      ></span
                     ></label
                   >
                 </div>
               </div>
             </div>
             <div class="border-t border-gray-200 mt-4 pt-2 text-center">
-              <label
-                @click="eventRefresh"
-                class="inline-flex items-center py-2 px-4 text-sm font-medium text-orange-500 hover:hover:text-orange-600 cursor-pointer"
-                >重新开始</label
-              >
+              <div class="flex items-center justify-between">
+                <label
+                  @click="eventReSave"
+                  class="inline-flex items-center py-2 text-sm font-medium text-orange-600 hover:hover:text-orange-600 cursor-pointer"
+                  >再次保存</label
+                >
+                <button
+                  type="button"
+                  @click="eventRefresh"
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 shrink-0 ml-2"
+                >
+                  完成
+                </button>
+              </div>
             </div>
           </template>
         </div>
@@ -283,7 +278,7 @@ import { fetchPost } from "./module/blogPost"
 
 const OptionsWeiboTimeRange = ["全部时间", "指定时间"]
 const OptionsWeiboSourceType = ["全部微博", "原创微博"]
-const OptionsWeiboImageScale = ["缩略图", "大图"]
+const OptionsWeiboImageScale = ["小图", "中图", "大图"]
 
 export default {
   async created() {
@@ -354,8 +349,18 @@ export default {
   watch: {
     weiboImageScaleType() {
       // 获取 .speechless-list 元素
+
+      console.log(11)
+      let scaleClassName =
+        "speechless-list-" +
+          ["small", "medium", "large"][this.weiboImageScaleType] || "medium"
       const speechlessList = document.querySelector(".speechless-list")
-      speechlessList.classList.toggle("speech-less-thumbnail")
+      speechlessList.classList.remove(
+        "speechless-list-small",
+        "speechless-list-medium",
+        "speechless-list-large"
+      )
+      speechlessList.classList.add(scaleClassName)
     },
   },
   methods: {
@@ -454,6 +459,9 @@ export default {
     },
     eventRefresh() {
       location.reload()
+    },
+    eventReSave() {
+      this.state = "SAVING"
     },
   },
 }
