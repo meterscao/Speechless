@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Speechless 微博备份",
-  "version": "2.0",
+  "version": "2.1",
   "description": "把新浪微博的内容，导出成 PDF 文件进行备份",
   "icons": {
     "16": "icons/Speechless16.png",

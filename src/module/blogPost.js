@@ -90,6 +90,25 @@ const clearLineBreak = function (text) {
   return textClear
 }
 
+const combineImageHtml = function (image, size) {
+  let str
+  if (!size) size = 120
+
+  if (image.width > 0 && image.height > 0) {
+    str = `<div class="image-container" style="width:${
+      (image.width * size) / image.height
+    }px;flex-grow:${
+      (image.width * size) / image.height
+    }"><i class="image-placeholder" style="padding-bottom:${
+      (image.height / image.width) * 100
+    }%"></i><img class="image-new" src="${image.url}" /></div>`
+  } else {
+    str = `<img class="image-old" style="height:${size}px" src="${image.url}" />`
+  }
+
+  return str
+}
+
 // 把卡片添加到页面中
 const appendPostToBody = function (post) {
   if (_sourceType == 1 && (post.retweeted_status || post.user.id != _uid)) {
@@ -125,55 +144,23 @@ const appendPostToBody = function (post) {
     }
 
     let mediaHTML = ""
+
     if (post.pic_infos) {
       mediaHTML += '<div class="media media-small">'
       for (let key in post.pic_infos) {
-        mediaHTML += `<div class="image-container" style="width:${
-          (post.pic_infos[key].large.width * 160) /
-          post.pic_infos[key].large.height
-        }px;flex-grow:${
-          (post.pic_infos[key].large.width * 160) /
-          post.pic_infos[key].large.height
-        }"><i class="image-placeholder" style="padding-bottom:${
-          (post.pic_infos[key].large.height / post.pic_infos[key].large.width) *
-          100
-        }%"></i><img class="image" src="${
-          post.pic_infos[key].large.url
-        }" /></div>`
+        mediaHTML += combineImageHtml(post.pic_infos[key].large, 160)
       }
       mediaHTML += "</div>"
 
       mediaHTML += '<div class="media media-medium">'
       for (let key in post.pic_infos) {
-        mediaHTML += `<div class="image-container" style="width:${
-          (post.pic_infos[key].large.width * 320) /
-          post.pic_infos[key].large.height
-        }px;flex-grow:${
-          (post.pic_infos[key].large.width * 320) /
-          post.pic_infos[key].large.height
-        }"><i class="image-placeholder" style="padding-bottom:${
-          (post.pic_infos[key].large.height / post.pic_infos[key].large.width) *
-          100
-        }%"></i><img class="image" src="${
-          post.pic_infos[key].large.url
-        }" /></div>`
+        mediaHTML += combineImageHtml(post.pic_infos[key].large, 320)
       }
       mediaHTML += "</div>"
 
       mediaHTML += '<div class="media media-large">'
       for (let key in post.pic_infos) {
-        mediaHTML += `<div class="image-container" style="width:${
-          (post.pic_infos[key].large.width * 500) /
-          post.pic_infos[key].large.height
-        }px;flex-grow:${
-          (post.pic_infos[key].large.width * 500) /
-          post.pic_infos[key].large.height
-        }"><i class="image-placeholder" style="padding-bottom:${
-          (post.pic_infos[key].large.height / post.pic_infos[key].large.width) *
-          100
-        }%"></i><img class="image" src="${
-          post.pic_infos[key].large.url
-        }" /></div>`
+        mediaHTML += combineImageHtml(post.pic_infos[key].large, 500)
       }
       mediaHTML += "</div>"
     }
