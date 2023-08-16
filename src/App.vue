@@ -88,7 +88,7 @@
               </div>
               <span
                 class="ml-1 text-xs text-zinc-700 bg-zinc-100 rounded border-zinc-300 border px-1 py"
-                >V2.1</span
+                >V2.2</span
               >
             </div>
             <div
