@@ -397,8 +397,16 @@ export default {
       this.pendingWording = ""
       let documentTitle = `@${this.username}`
       if (this.weiboRangeType == 1) {
-        this.pendingWording += `${this.weiboRange.start.year}年${this.weiboRange.start.month}月 - ${this.weiboRange.end.year}年${this.weiboRange.end.month}月`
-        documentTitle += `_${this.weiboRange.start.year}${this.weiboRange.start.month}-${this.weiboRange.end.year}${this.weiboRange.end.month}`
+        this.pendingWording += `${
+          this.weiboRange.start.year
+        }年${this.fillWithZero(this.weiboRange.start.month)}月 - ${
+          this.weiboRange.end.year
+        }年${this.fillWithZero(this.weiboRange.end.month)}月`
+        documentTitle += `_${this.weiboRange.start.year}${this.fillWithZero(
+          this.weiboRange.start.month
+        )}-${this.weiboRange.end.year}${this.fillWithZero(
+          this.weiboRange.end.month
+        )}`
       }
       if (this.weiboSourceType == 1) {
         this.pendingWording += `的原创微博`
@@ -462,6 +470,9 @@ export default {
     },
     eventReSave() {
       this.state = "SAVING"
+    },
+    fillWithZero(n) {
+      return (n < 10 ? "0" : "") + n
     },
   },
 }

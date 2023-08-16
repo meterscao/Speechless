@@ -86,7 +86,7 @@ const getDate = function (dateString, showSecond) {
 // 过滤多余的换行
 const clearLineBreak = function (text) {
   let textClear = text.replace(/\n/g, "<br/>")
-  textClear = textClear.replace(/(<br\s?\/>)+/g, "<br/>")
+  textClear = textClear.replace(/(<br\s?\/>){3,}/g, "<br/><br/>")
   return textClear
 }
 
@@ -238,6 +238,13 @@ const formatPosts = async function (posts, uid) {
     if (post.user.id != uid) continue
     if (!!post.isLongText) {
       try {
+        let offset = parseInt(new Date().valueOf()) - lastFetchTimeStamp
+        if (offset < interval) {
+          let delayMS = interval - offset
+          console.log(`Delay of ${delayMS} milliseconds`)
+          await delay(delayMS)
+        }
+        lastFetchTimeStamp = parseInt(new Date().getTime())
         let longtextData = await fetchLongText(post.mblogid)
         post.long_text_source = longtextData.longTextContent || ""
         console.log(post)
@@ -247,6 +254,12 @@ const formatPosts = async function (posts, uid) {
     }
     if (post.retweeted_status && post.retweeted_status.isLongText) {
       try {
+        let offset = parseInt(new Date().valueOf()) - lastFetchTimeStamp
+        if (offset < interval) {
+          let delayMS = interval - offset
+          console.log(`Delay of ${delayMS} milliseconds`)
+          await delay(delayMS)
+        }
         let longtextData = await fetchLongText(post.retweeted_status.mblogid)
         post.retweeted_status.long_text_source =
           longtextData.longTextContent || ""
